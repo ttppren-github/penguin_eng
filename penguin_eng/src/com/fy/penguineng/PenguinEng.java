@@ -1,66 +1,48 @@
 package com.fy.penguineng;
 
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.FPSLogger;
 
-public class PenguinEng implements ApplicationListener {
-	private OrthographicCamera camera;
-	private SpriteBatch batch;
-	private Texture texture;
-	private Sprite sprite;
+public class PenguinEng extends Game {
+
+	FPSLogger fps;
+	String text;
+	EasyDemoScreen gameScreen;
 	
 	@Override
-	public void create() {		
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
-		
-		camera = new OrthographicCamera(1, h/w);
-		batch = new SpriteBatch();
-		
-		texture = new Texture(Gdx.files.internal("data/libgdx.png"));
-		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
-		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
-		
-		sprite = new Sprite(region);
-		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
-		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
+	public void create() {
+		gameScreen = new EasyDemoScreen(this);
+		this.setScreen(gameScreen);
+
+		Assets.loadAsset();
+		fps = new FPSLogger();
+		text = new String();
 	}
 
+	@Override
+	public void render() {
+		super.render();
+		fps.log();
+	}
+
+	/**
+	 * {@link Game#dispose()} only calls {@link Screen#hide()} so you need to
+	 * override {@link Game#dispose()} in order to call {@link Screen#dispose()}
+	 * on each of your screens which still need to dispose of their resources.
+	 * SuperJumper doesn't actually have such resources so this is only to
+	 * complete the example.
+	 */
 	@Override
 	public void dispose() {
-		batch.dispose();
-		texture.dispose();
-	}
+		super.dispose();
 
-	@Override
-	public void render() {		
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		sprite.draw(batch);
-		batch.end();
+		getScreen().dispose();
 	}
-
-	@Override
-	public void resize(int width, int height) {
-	}
-
-	@Override
-	public void pause() {
-	}
-
-	@Override
-	public void resume() {
+	
+	public void setRecognize(String res){
+		if (!text.matches(res)){
+			gameScreen.setText(res);
+		}
 	}
 }

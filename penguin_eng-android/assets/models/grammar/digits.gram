@@ -1,0 +1,19 @@
+#JSGF V1.0;
+
+grammar digits;
+
+<digit> =	ONE               |
+			TWO                |
+			THREE               |
+			FOUR                |
+			FIVE                |
+			SIX                 |
+			SEVEN              |
+			EIGHT               |
+			NINE                |
+			ZERO                |
+			OH                   |
+			TEN					 ;
+
+          
+public <digits> = <digit>+;
