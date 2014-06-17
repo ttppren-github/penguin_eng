@@ -1,0 +1,26 @@
+#JSGF V1.0;
+
+grammar digits;
+
+<digit> =	adjust               |
+			bag                |
+			calm               |
+			damage                |
+			early                |
+			fear                 |
+			glory              |
+			handsome               |
+			image                |
+			join                |
+			know                   |
+			lead              |
+			manage               |
+			neighbor                |
+			opportunity              |
+			park                   |
+			come on	|
+			let's go	|
+			go home					 ;
+
+          
+public <digits> = <digit>;

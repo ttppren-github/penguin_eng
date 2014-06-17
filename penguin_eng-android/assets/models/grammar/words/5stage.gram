@@ -1,0 +1,26 @@
+#JSGF V1.0;
+
+grammar digits;
+
+<digit> =	advance               |
+			ball                |
+			camera               |
+			dear                |
+			easy                |
+			file                |
+			grateful                 |
+			head              |
+			impressive               |
+			joy                |
+			kind                |
+			learn                   |
+			market              |
+			normal               |
+			office                |
+			passion                   |
+			really funny	|
+			good night	|
+			see you					 ;
+
+          
+public <digits> = <digit>;

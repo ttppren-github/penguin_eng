@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">My LibGDX Game</string>
+
+    <string name="app_name">Star Fish</string>
+    <string name="noi_title">Star Fish</string>
+    <string name="noi_click">Click to download</string>
+    <string name="noi_dl_content">Download in progress</string>
+    <string name="btn_start">Start Game</string>
+
 </resources>

@@ -1,0 +1,26 @@
+#JSGF V1.0;
+
+grammar digits;
+
+<digit> =	aboard               |
+			back                |
+			cake               |
+			dare	|
+			each                |
+			face                |
+			gain                 |
+			habit              |
+			idea               |
+			jacket                |
+			lab                   |
+			machine              |
+			name               |
+			observe                |
+			pace                   |	
+			thank you	|
+			i love you  |
+			do me a favor		|
+			key                	 ;
+
+          
+public <digits> = <digit>;

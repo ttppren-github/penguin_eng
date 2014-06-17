@@ -1,37 +1,182 @@
 package com.fy.penguineng;
 
-import static edu.cmu.pocketsphinx.SpeechRecognizerSetup.defaultSetup;
 import static edu.cmu.pocketsphinx.Assets.syncAssets;
 
 import java.io.File;
 import java.io.IOException;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Window;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.fy.sphinx.WordRecognizer;
+import com.fy.sphinx.WordRecognizerSetup;
+import com.fy.sphinx.WordRecognizer.VolumeListener;
 
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
-import edu.cmu.pocketsphinx.SpeechRecognizer;
 
-public class MainActivity extends AndroidApplication implements
-		RecognitionListener {
+public class MainActivity extends AndroidApplication {
 	private static final String DIGITS_SEARCH = "digits";
-	private SpeechRecognizer recognizer;
+	private WordRecognizer recognizer;
 	private PenguinEng game;
+	private TextToSpeech tts;
+	private AutoUpdateApk aua;
+	private File appDir;
+	private Context ctx;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ctx = this;
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
-
 		game = new PenguinEng();
 		initialize(game, cfg);
 
-		File appDir;
+		// Add delay for display logging screen quickly
+		Handler handler = new Handler();
+		handler.postDelayed(initVoiceRun, 500);
+	}
+
+	@Override
+	protected void onDestroy() {
+		if (aua != null) {
+			aua.stop();
+		}
+		if (tts != null) {
+			if (tts.isSpeaking()) {
+				tts.stop();
+			}
+			tts.shutdown();
+		}
+
+		if (recognizer != null) {
+			recognizer.cancel();
+		}
+
+		System.exit(0);
+		super.onDestroy();
+	}
+
+	RecognitionListener recognitionListener = new RecognitionListener() {
+		@Override
+		public void onBeginningOfSpeech() {
+		}
+
+		@Override
+		public void onEndOfSpeech() {
+		}
+
+		@Override
+		public void onPartialResult(Hypothesis hypothesis) {
+			String text = hypothesis.getHypstr();
+
+			game.setRecognize(text);
+			Log.d("Pengui", "text=" + text);
+		}
+
+		@Override
+		public void onResult(Hypothesis hypothesis) {
+			String text = hypothesis.getHypstr();
+			game.setRecognize(text);
+			Log.d("Pengui", "text=" + text);
+		}
+	};
+
+	private VolumeListener listener = new VolumeListener() {
+		@Override
+		public void onVolumeChange(int energy) {
+			// Log.d("Pengui", "energy=" + energy);
+			game.setVolume(energy);
+		}
+	};
+
+	TextToSpeech.OnInitListener TtsInitListener = new TextToSpeech.OnInitListener() {
+		@Override
+		public void onInit(int status) {
+			tts.setPitch((float) 1.0);
+			tts.setSpeechRate((float) 1.0);
+		}
+	};
+	private IGameControl ttsListener = new IGameControl() {
+		public void speakOut(String word) {
+			if (tts != null) {
+				tts.speak(word, TextToSpeech.QUEUE_ADD, null);
+			}
+
+		}
+
+		@Override
+		public void startRecognizer() {
+			recognizer.startListening(DIGITS_SEARCH);
+		}
+
+		@Override
+		public void stopRecognizer() {
+			recognizer.stop();
+		}
+
+		@Override
+		public void closeGame() {
+			finish();
+		}
+
+		@Override
+		public void loadGrammar(String file) {
+			if (file == null || file.isEmpty()) {
+				return;
+			}
+
+			File digitsGrammar = new File(appDir, file);
+			recognizer.addGrammarSearch(DIGITS_SEARCH, digitsGrammar);
+		}
+
+		@Override
+		public boolean isSpeaking() {
+			return tts.isSpeaking();
+		}
+
+		@Override
+		public boolean checkFirstRun() {
+			SharedPreferences preferences = getSharedPreferences("config.xml",
+					MODE_PRIVATE);
+			int count = preferences.getInt("count", 0);
+			if (0 == count) {
+				preferences.edit().putInt("count", 1).commit();
+
+				Intent intent = new Intent(ctx, Welcome.class);
+				startActivity(intent);
+
+				return true;
+			}
+
+			return false;
+		}
+	};
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			return true;
+		}
+
+		return super.onKeyUp(keyCode, event);
+	}
+
+	private void initVoice() {
+		AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+		am.setParameters("noise_suppression=auto");
 
 		try {
 			appDir = syncAssets(getApplicationContext());
@@ -39,56 +184,40 @@ public class MainActivity extends AndroidApplication implements
 			throw new RuntimeException("failed to synchronize assets", e);
 		}
 
-		recognizer = defaultSetup()
+		recognizer = (WordRecognizer) WordRecognizerSetup
+				.defaultSetup()
+				// .setAcousticModel(new File(appDir, "models/hmm/en-us-semi"))
+				// .setAcousticModel(new File(appDir,
+				// "models/hmm/hub4wsj_sc_8k"))
 				.setAcousticModel(
 						new File(appDir, "models/acoustic/hub4wsj_sc_8k"))
-				.setDictionary(new File(appDir, "models/lm/en/turtle.dic"))
+				// .setAcousticModel(new File(appDir,
+				// "models/acoustic/tidigits"))
+				.setDictionary(new File(appDir, "models/lm/en_US/cmu07a.dic"))
+				// .setDictionary(new File(appDir,
+				// "models/acoustic/dict/digits.dict"))
+				// .setDictionary(new File(appDir, "models/lm/en/turtle.dic"))
 				.setRawLogDir(appDir).setKeywordThreshold(1e-5f)
 				.getRecognizer();
-		recognizer.addListener(this);
+		recognizer.addListener(recognitionListener);
+		recognizer.addListener(listener);
 
-		File digitsGrammar = new File(appDir,
-				"models/grammar/digitsLowLetter.gram");
-		recognizer.addGrammarSearch(DIGITS_SEARCH, digitsGrammar);
+		tts = new TextToSpeech(getApplicationContext(), TtsInitListener);
+
+		// Start to check new version
+		aua = new AutoUpdateApk(getApplicationContext());
+		aua.start();
+
+		// here for waiting this run over in Logging Screen
+		game.setTtsListener(ttsListener);
 	}
 
-	@Override
-	protected void onPause() {
-		recognizer.stop();
-		super.onPause();
-	}
+	private Runnable initVoiceRun = new Runnable() {
 
-	@Override
-	protected void onResume() {
-		recognizer.startListening(DIGITS_SEARCH);
-		super.onResume();
-	}
+		@Override
+		public void run() {
+			initVoice();
+		}
 
-	@Override
-	public void onBeginningOfSpeech() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onEndOfSpeech() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onPartialResult(Hypothesis hypothesis) {
-		String text = hypothesis.getHypstr();
-		String[] data = text.split(" ");
-		String rel = data[data.length - 1];
-		
-		game.setRecognize(rel);
-//		Log.d("Pengui", "text=" + rel);
-	}
-
-	@Override
-	public void onResult(Hypothesis hypothesis) {
-		String text = hypothesis.getHypstr();
-		Log.d("Pengui", "text=" + text);
-	}
+	};
 }
