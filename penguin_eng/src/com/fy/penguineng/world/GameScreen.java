@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
 		});
 
 		Pixmap pixmap = new Pixmap(480, 800, Pixmap.Format.RGBA8888);
-		pixmap.setColor(10f, 10f, 10f, 0.7f);
+		pixmap.setColor(1f, 1f, 1f, 0.7f);
 		pixmap.fillRectangle(0, 0, 480, 800);
 		Texture tx = new Texture(pixmap);
 		uiStage.addActor(new Image(tx));
