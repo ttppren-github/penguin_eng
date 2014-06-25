@@ -16,7 +16,7 @@ grammar digits;
 			learn                   |
 			market              |
 			normal               |
-			office                |
+			officer                |
 			passion                   |
 			really funny	|
 			good night	|

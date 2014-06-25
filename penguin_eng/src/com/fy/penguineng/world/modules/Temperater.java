@@ -4,7 +4,7 @@ public class Temperater extends BaseObject {
 	private static final float WIDTH = 0.8f;
 	private static final float HEIGHT = 0.8f;
 
-	public static final int MAX_T = 20;
+	public static final int MAX_T = 12;
 	public float height = 0;
 
 	public Temperater(float x, float y) {

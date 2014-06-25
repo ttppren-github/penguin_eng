@@ -2,7 +2,6 @@ package com.fy.penguineng;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -27,7 +26,7 @@ public class Welcome extends Activity {
 	private GestureDetector detector;
 	private Context ctx;
 	private int curPos;
-	private ImageView img1, img2, img3, welcome;
+	private ImageView img1, img2, img3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +57,6 @@ public class Welcome extends Activity {
 			}
 
 		});
-
-		welcome = new ImageView(this);
-		welcome.setBackgroundResource(R.drawable.welcom);
-		viewFlipper.addView(welcome);
 
 		img1 = new ImageView(this);
 		img1.setBackgroundResource(R.drawable.introduction1);
@@ -142,7 +137,7 @@ public class Welcome extends Activity {
 		}
 
 		private void showPrev() {
-			if (viewFlipper.getCurrentView() != welcome) {
+			if (viewFlipper.getCurrentView() != img1) {
 				viewFlipper.setInAnimation(AnimationUtils.loadAnimation(ctx,
 						R.anim.push_right_in));
 				viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(ctx,

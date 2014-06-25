@@ -182,8 +182,7 @@ public class AutoUpdateApk extends Observable {
 					newApkUrl = result[1];
 					buildNotification();
 				} else {
-					Log.d(TAG, "no update available: result[0]:" + result[0]
-							+ ", re[1]" + result[1]);
+					Log.d(TAG, "no update available");
 				}
 				return result;
 			} catch (ParseException e) {
@@ -193,7 +192,7 @@ public class AutoUpdateApk extends Observable {
 				// e.printStackTrace();
 				Log.e(TAG, e.getMessage());
 			} catch (IOException e) {
-				 e.printStackTrace();
+				e.printStackTrace();
 			} finally {
 				httpclient.getConnectionManager().shutdown();
 				long elapsed = System.currentTimeMillis() - start;

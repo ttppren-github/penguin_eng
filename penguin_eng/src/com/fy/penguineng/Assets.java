@@ -3,14 +3,18 @@ package com.fy.penguineng;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Assets {
@@ -203,8 +207,10 @@ public class Assets {
 		listStyle.font = manager.get(FONT);
 		listStyle.fontColorSelected = Color.WHITE;
 		listStyle.fontColorUnselected = Color.BLACK;
-		listStyle.selection = new TextureRegionDrawable(new TextureRegion(
-				manager.get(btnNormal, Texture.class)));
+		// listStyle.selection = new TextureRegionDrawable(new TextureRegion(
+		// manager.get(btnNormal, Texture.class)));
+		listStyle.selection = new SpriteDrawable(new Sprite(new Texture(
+				new Pixmap(20, 20, Format.RGBA8888))));
 
 		skin = new Skin();
 		skin.add(FONT, labelStyle);
