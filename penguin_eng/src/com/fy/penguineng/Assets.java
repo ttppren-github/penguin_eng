@@ -27,8 +27,6 @@ public class Assets {
 	public final static String FACTORY = PATH + "factory.png";
 	public final static String ICEBERG = PATH + "iceberg.png";
 	public final static String MIC = PATH + "mic.png";
-	public final static String TEMP_B = PATH + "temperater_a.png";
-	public final static String TEMP_F = PATH + "temperater_b.png";
 	public final static String PAUSE = PATH + "pause.png";
 	public final static String SUN = PATH + "sun.9.png";
 	public final static String MainMenu_Bg = PATH + "mainmenu.png";
@@ -91,8 +89,6 @@ public class Assets {
 		manager.load(FACTORY, Texture.class);
 		manager.load(ICEBERG, Texture.class);
 		manager.load(MIC, Texture.class);
-		manager.load(TEMP_B, Texture.class);
-		manager.load(TEMP_F, Texture.class);
 		manager.load(PAUSE, Texture.class);
 		manager.load(SUN, Texture.class);
 		manager.load(MainMenu_Bg, Texture.class);

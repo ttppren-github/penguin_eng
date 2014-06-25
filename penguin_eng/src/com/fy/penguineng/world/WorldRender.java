@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.world.views.IcebergView;
 import com.fy.penguineng.world.views.MicPowerView;
-import com.fy.penguineng.world.views.TemperaterView;
 import com.fy.penguineng.world.views.WordCloudView;
 
 public class WorldRender {
@@ -13,15 +12,12 @@ public class WorldRender {
 
 	private WordCloudView bobView;
 	private IcebergView icebergView;
-	private TemperaterView temperaterView;
 	private MicPowerView micPowerView;
 	private GameStage world;
 
 	public WorldRender(GameStage world) {
-
 		bobView = new WordCloudView();
-		icebergView = new IcebergView();
-		temperaterView = new TemperaterView();
+		icebergView = new IcebergView(world.iceberg.bounds);
 		micPowerView = new MicPowerView();
 
 		frustum_width = Assets.VIRTUAL_WIDTH;
@@ -49,12 +45,7 @@ public class WorldRender {
 		micPowerView.render(batch);
 
 		icebergView.setPosition(world.iceberg.position);
-		icebergView.setBound(world.iceberg.bounds);
 		icebergView.render(batch);
-
-		temperaterView.setPosition(world.temperater.position);
-		temperaterView.setHeight(world.temperater.getHeight());
-		temperaterView.render(batch);
 
 		bobView.setBound(world.bob.bounds);
 		bobView.setPostion(world.bob.position);
