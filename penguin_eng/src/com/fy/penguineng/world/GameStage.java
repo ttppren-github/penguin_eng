@@ -97,11 +97,11 @@ public class GameStage extends BaseStage {
 				gamePass();
 			}
 		} else if (WordCloud.BOB_STATE_IDLE == bob.state
-				&& !ttsListener.isSpeaking()) {
+				/*&& !ttsListener.isSpeaking()*/) {
 			bob.reset();
 			wordFromMic = "";
 			iceberg.start();
-			ttsListener.startRecognizer();
+//			ttsListener.startRecognizer();
 		}
 
 		if (WordCloud.BOB_STATE_FLYING == bob.state) {

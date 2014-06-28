@@ -31,6 +31,7 @@ public class Assets {
 	public final static String SUN = PATH + "sun.9.png";
 	public final static String MainMenu_Bg = PATH + "mainmenu.png";
 	public final static String SwitchScreen_Bg = PATH + "switch_bg.png";
+	public final static String Ruler = PATH + "ruler.png";
 	public final static String Btn = "btn";
 	public final static String BtnReturn = "ImageButton";
 	public final static String BtnStar = PATH + "normal_star.png";
@@ -97,6 +98,7 @@ public class Assets {
 		manager.load(btnPressed, Texture.class);
 		manager.load(BtnStar, Texture.class);
 		manager.load(LockStar, Texture.class);
+		manager.load(Ruler, Texture.class);
 
 		// manager.finishLoading();
 		Gdx.app.log(TAG, "loadResources()");

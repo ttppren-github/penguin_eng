@@ -5,6 +5,7 @@ package com.fy.penguineng.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SizeToAction;
@@ -52,7 +53,7 @@ public class LogoScreen implements Screen {
 		start += delta;
 		if (game.assets.update()) {
 			float ret = game.assets.getProgress();
-			if (ret == 1 && game.ttsListener != null && start > DELAY) {
+			if (ret == 1 /*&& game.ttsListener != null*/ && start > DELAY) {
 				Gdx.app.log(TAG, "loading resource over.");
 				
 				game.resourceReady();
@@ -81,6 +82,9 @@ public class LogoScreen implements Screen {
 		sizeToAction.setDuration(2);
 		sizeToAction.setSize(logo.getWidth() / 2, logo.getHeight() / 2);
 		logo.addAction(sizeToAction);
+		
+		Music music = Gdx.audio.newMusic(Gdx.files.internal("welcome_starfish.ogg"));
+		music.play();
 	}
 
 	@Override

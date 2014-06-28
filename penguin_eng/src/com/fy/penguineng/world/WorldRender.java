@@ -31,11 +31,10 @@ public class WorldRender {
 	}
 
 	public void renderBackground(Batch batch) {
+		float w = world.assests.getTexture(Assets.FACTORY).getWidth() * 3 / 4;
+		float x = (frustum_width - w) / 2;
 		batch.draw(world.assests.getTexture(Assets.BACKGROUND), 0, 0);
-		batch.draw(world.assests.getTexture(Assets.FACTORY),
-				(frustum_width - world.assests.getTexture(Assets.FACTORY)
-						.getWidth()) / 2, 0,
-				world.assests.getTexture(Assets.FACTORY).getWidth(),
+		batch.draw(world.assests.getTexture(Assets.FACTORY), x, 0, w,
 				(int) (frustum_height * 0.2));
 	}
 
@@ -45,6 +44,7 @@ public class WorldRender {
 		micPowerView.render(batch);
 
 		icebergView.setPosition(world.iceberg.position);
+		icebergView.setHeight(String.valueOf(world.iceberg.mHeight));
 		icebergView.render(batch);
 
 		bobView.setBound(world.bob.bounds);
