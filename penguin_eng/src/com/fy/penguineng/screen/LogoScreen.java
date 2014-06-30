@@ -83,7 +83,7 @@ public class LogoScreen implements Screen {
 		sizeToAction.setSize(logo.getWidth() / 2, logo.getHeight() / 2);
 		logo.addAction(sizeToAction);
 		
-		Music music = Gdx.audio.newMusic(Gdx.files.internal("welcome_starfish.ogg"));
+		Music music = Gdx.audio.newMusic(Gdx.files.internal("sounds/welcome_starfish.ogg"));
 		music.play();
 	}
 

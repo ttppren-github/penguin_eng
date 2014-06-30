@@ -41,7 +41,7 @@ public class Assets {
 	public static final int CLOUD_WIDTH = 100;
 	public static final int CLOUD_HEIGHT = 50;
 	public static final int LETTER_HEIGHT = 18;
-	public static final int LETTER_WIDTH = 16;
+	public static final int LETTER_WIDTH = 20;
 	public static final int TEMP_WIDTH = 20;
 	public static final int TEMP_HEIGHT = 224;
 	public static float VIRTUAL_WIDTH = 480;

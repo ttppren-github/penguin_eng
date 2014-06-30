@@ -32,7 +32,7 @@ public class IcebergView extends BaseView {
 				bound.height);
 
 		batch.draw(assets.getTexture(Assets.Ruler), 340, y);
-		font.draw(batch, strHeight, 200, bound.height + y);
+		font.draw(batch, strHeight, 200, 760);
 	}
 
 	public void setHeight(String height) {

@@ -15,10 +15,12 @@ import com.fy.penguineng.world.modules.WordCloud;
  * 
  */
 public class GameStage extends BaseStage {
-//	private static final String TAG = "World Control";
+	// private static final String TAG = "World Control";
 	private static final float BOB_BEGIN = 0.2f;
 	private static final float BOB_OVER = 0.9f;
 	private static final float ICEBERG_Y = 0.36f;
+
+	public int outValue;
 
 	protected final WordCloud bob;
 	protected final Iceberg iceberg;
@@ -55,6 +57,7 @@ public class GameStage extends BaseStage {
 		bob.reset();
 		temperature = 0;
 		iceberg.reset();
+		outValue = 0;
 	}
 
 	@Override
@@ -97,11 +100,12 @@ public class GameStage extends BaseStage {
 				gamePass();
 			}
 		} else if (WordCloud.BOB_STATE_IDLE == bob.state
-				/*&& !ttsListener.isSpeaking()*/) {
+		/* && !ttsListener.isSpeaking() */) {
+			outValue += bob.getWord().length();
 			bob.reset();
 			wordFromMic = "";
 			iceberg.start();
-//			ttsListener.startRecognizer();
+			// ttsListener.startRecognizer();
 		}
 
 		if (WordCloud.BOB_STATE_FLYING == bob.state) {
