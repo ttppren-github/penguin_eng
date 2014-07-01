@@ -8,6 +8,7 @@ import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.IGameControl;
 import com.fy.penguineng.world.modules.Iceberg;
 import com.fy.penguineng.world.modules.MicPower;
+import com.fy.penguineng.world.modules.Temperater;
 import com.fy.penguineng.world.modules.WordCloud;
 
 /**
@@ -24,6 +25,7 @@ public class GameStage extends BaseStage {
 
 	protected final WordCloud bob;
 	protected final Iceberg iceberg;
+	protected final Temperater temperater;
 	protected final MicPower micPower;
 	private WorldRender render;
 	private int temperature = 0;
@@ -46,6 +48,8 @@ public class GameStage extends BaseStage {
 		this.bob = new WordCloud(Assets.VIRTUAL_WIDTH / 2,
 				Assets.VIRTUAL_HEIGHT * BOB_BEGIN);
 		this.iceberg = new Iceberg(0, Assets.VIRTUAL_HEIGHT * ICEBERG_Y);
+		this.temperater = new Temperater(10, Assets.VIRTUAL_HEIGHT
+				* TEMPERATER_Y);
 		this.micPower = new MicPower(Assets.VIRTUAL_WIDTH - 80,
 				(float) (Assets.VIRTUAL_HEIGHT * 0.9));
 
@@ -73,6 +77,7 @@ public class GameStage extends BaseStage {
 	public void act(float deltaTime) {
 		updateBob(deltaTime);
 		updateIceberg(deltaTime);
+		temperater.update(deltaTime, temperature);
 		micPower.update(deltaTime, volume);
 
 		super.act(deltaTime);
@@ -100,12 +105,11 @@ public class GameStage extends BaseStage {
 				gamePass();
 			}
 		} else if (WordCloud.BOB_STATE_IDLE == bob.state
-		/* && !ttsListener.isSpeaking() */) {
-			outValue += bob.getWord().length();
+				&& !ttsListener.isSpeaking()) {
 			bob.reset();
 			wordFromMic = "";
 			iceberg.start();
-			// ttsListener.startRecognizer();
+			ttsListener.startRecognizer();
 		}
 
 		if (WordCloud.BOB_STATE_FLYING == bob.state) {
