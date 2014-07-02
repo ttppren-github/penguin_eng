@@ -1,6 +1,5 @@
 [
 {"name":"welcome",       "yisi":"欢迎您"},
-{"name":"hello",         "yisi":"你好"},
 {"name":"good",          "yisi":"好"},
 {"name":"thanks",        "yisi":"多谢"},
 {"name":"boy",           "yisi":"男孩儿"},
@@ -13,9 +12,7 @@
 {"name":"happy",         "yisi":"开心"},
 {"name":"sleep",         "yisi":"睡觉"},
 {"name":"fast",          "yisi":"快速"},
-{"name":"how do you do", "yisi":"你好"},
 {"name":"believe",       "yisi":"相信"},
 {"name":"good night",    "yisi":"晚安"},
-{"name":"have fun",      "yisi":"玩的开心"},
 {"name":"laugh",         "yisi":"笑"},
 ]
