@@ -155,8 +155,8 @@ public class GameFailScreen implements Screen {
 				WordPool.getInstance().reload();
 				gameMain.setScreen(gameMain.gameScreen);
 			} else if (event.getListenerActor() == btnVoice) {
-				if (gameMain.ttsListener != null) {
-					gameMain.ttsListener.speakOut(selectedWord);
+				if (gameMain.recognizerCtrl != null) {
+					gameMain.ttsCtrl.speakOut(selectedWord);
 				}
 			}
 		}

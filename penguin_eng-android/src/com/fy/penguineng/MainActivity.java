@@ -11,16 +11,16 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.fy.penguineng.icontrol.IGameControl;
 import com.fy.sphinx.WordRecognizer;
-import com.fy.sphinx.WordRecognizerSetup;
 import com.fy.sphinx.WordRecognizer.VolumeListener;
+import com.fy.sphinx.WordRecognizerSetup;
 
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
@@ -29,7 +29,6 @@ public class MainActivity extends AndroidApplication {
 	private static final String DIGITS_SEARCH = "digits";
 	private WordRecognizer recognizer;
 	private PenguinEng game;
-	private TextToSpeech tts;
 	private AutoUpdateApk aua;
 	private File appDir;
 	private Context ctx;
@@ -53,12 +52,6 @@ public class MainActivity extends AndroidApplication {
 	protected void onDestroy() {
 		if (aua != null) {
 			aua.stop();
-		}
-		if (tts != null) {
-			if (tts.isSpeaking()) {
-				tts.stop();
-			}
-			tts.shutdown();
 		}
 
 		if (recognizer != null) {
@@ -102,20 +95,7 @@ public class MainActivity extends AndroidApplication {
 		}
 	};
 
-	TextToSpeech.OnInitListener TtsInitListener = new TextToSpeech.OnInitListener() {
-		@Override
-		public void onInit(int status) {
-			tts.setPitch((float) 1.0);
-			tts.setSpeechRate((float) 1.0);
-		}
-	};
 	private IGameControl ttsListener = new IGameControl() {
-		public void speakOut(String word) {
-			if (tts != null) {
-				tts.speak(word, TextToSpeech.QUEUE_ADD, null);
-			}
-
-		}
 
 		@Override
 		public void startRecognizer() {
@@ -140,11 +120,6 @@ public class MainActivity extends AndroidApplication {
 
 			File digitsGrammar = new File(appDir, file);
 			recognizer.addGrammarSearch(DIGITS_SEARCH, digitsGrammar);
-		}
-
-		@Override
-		public boolean isSpeaking() {
-			return tts.isSpeaking();
 		}
 
 		@Override
@@ -201,8 +176,6 @@ public class MainActivity extends AndroidApplication {
 				.getRecognizer();
 		recognizer.addListener(recognitionListener);
 		recognizer.addListener(listener);
-
-		tts = new TextToSpeech(getApplicationContext(), TtsInitListener);
 
 		// Start to check new version
 		aua = new AutoUpdateApk(getApplicationContext());

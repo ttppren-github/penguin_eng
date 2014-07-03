@@ -78,10 +78,10 @@ public class SwichScreen implements Screen {
 					String str = String.format("dic/%dstage_dic.json", i);
 					pool.loadJson(str);
 
-					if (gameMain.ttsListener != null) {
+					if (gameMain.recognizerCtrl != null) {
 						String gram = String.format(
 								"models/grammar/words/%dstage.gram", i);
-						gameMain.ttsListener.loadGrammar(gram);
+						gameMain.recognizerCtrl.loadGrammar(gram);
 					}
 
 					gameMain.setScreen(gameMain.gameScreen);

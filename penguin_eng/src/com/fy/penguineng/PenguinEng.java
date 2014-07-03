@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
+import com.fy.penguineng.icontrol.IGameControl;
+import com.fy.penguineng.icontrol.ITtsCtrl;
 import com.fy.penguineng.screen.GameFailScreen;
 import com.fy.penguineng.screen.GamePassScreen;
 import com.fy.penguineng.screen.LogoScreen;
@@ -24,7 +26,8 @@ public class PenguinEng extends Game {
 	private String text;
 	public Assets assets;
 
-	public IGameControl ttsListener;
+	public IGameControl recognizerCtrl;
+	public ITtsCtrl ttsCtrl;
 
 	public PenguinEng() {
 		assets = Assets.getInstance();
@@ -74,7 +77,7 @@ public class PenguinEng extends Game {
 	}
 
 	public void setTtsListener(IGameControl ttsListener) {
-		this.ttsListener = ttsListener;
+		this.recognizerCtrl = ttsListener;
 	}
 
 	public void resourceReady() {
@@ -87,7 +90,7 @@ public class PenguinEng extends Game {
 		gamePassScreen = new GamePassScreen(this);
 		gameFailScreen = new GameFailScreen(this);
 
-		if (null == ttsListener || !ttsListener.checkFirstRun()) {
+		if (null == recognizerCtrl || !recognizerCtrl.checkFirstRun()) {
 			setScreen(mainScreen);
 		}
 	}

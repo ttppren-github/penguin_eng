@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
 		state = GAME_STATE_STOPPED;
 
 		uiStage = new BaseStage();
-		gameStage = new GameStage(game.ttsListener);
+		gameStage = new GameStage(game.recognizerCtrl);
 		gameStage.setPlayCtrlListener(playStateListener);
 
 		Assets assets = Assets.getInstance();
@@ -144,8 +144,8 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
-		if (null != game.ttsListener) {
-			game.ttsListener.stopRecognizer();
+		if (null != game.recognizerCtrl) {
+			game.recognizerCtrl.stopRecognizer();
 		}
 
 		Gdx.input.setInputProcessor(null);
@@ -155,16 +155,16 @@ public class GameScreen implements Screen {
 	public void pause() {
 		state = GAME_STATE_PAUSED;
 
-		if (null != game.ttsListener) {
-			game.ttsListener.stopRecognizer();
+		if (null != game.recognizerCtrl) {
+			game.recognizerCtrl.stopRecognizer();
 		}
 	}
 
 	private void stop(Screen screen) {
 		state = GAME_STATE_STOPPED;
 
-		if (null != game.ttsListener) {
-			game.ttsListener.stopRecognizer();
+		if (null != game.recognizerCtrl) {
+			game.recognizerCtrl.stopRecognizer();
 		}
 
 		game.setScreen(screen);
@@ -174,8 +174,8 @@ public class GameScreen implements Screen {
 	public void resume() {
 		state = GAME_STATE_RUNNING;
 
-		if (null != game.ttsListener) {
-			game.ttsListener.startRecognizer();
+		if (null != game.recognizerCtrl) {
+			game.recognizerCtrl.startRecognizer();
 		}
 	}
 
@@ -190,8 +190,8 @@ public class GameScreen implements Screen {
 		inputMultiplexer.addProcessor(new ScreenInputHandler());
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
-		if (null != game.ttsListener) {
-			game.ttsListener.startRecognizer();
+		if (null != game.recognizerCtrl) {
+			game.recognizerCtrl.startRecognizer();
 		}
 	}
 

@@ -5,7 +5,8 @@ package com.fy.penguineng.world;
 
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.BaseStage;
-import com.fy.penguineng.IGameControl;
+import com.fy.penguineng.icontrol.IGameControl;
+import com.fy.penguineng.icontrol.ITtsCtrl;
 import com.fy.penguineng.world.modules.Iceberg;
 import com.fy.penguineng.world.modules.MicPower;
 import com.fy.penguineng.world.modules.WordCloud;
@@ -27,7 +28,8 @@ public class GameStage extends BaseStage {
 	private int temperature = 0;
 	private IPlayStateListener playStateListener;
 	private int volume;
-	private IGameControl ttsListener;
+	private IGameControl recognizerCtrl;
+	private ITtsCtrl ttsCtrl;
 	private String wordFromMic;
 
 	public interface IPlayStateListener {
@@ -48,7 +50,7 @@ public class GameStage extends BaseStage {
 				(float) (Assets.VIRTUAL_HEIGHT * 0.9));
 
 		render = new WorldRender(this);
-		this.ttsListener = ttsListener;
+		this.recognizerCtrl = ttsListener;
 	}
 
 	public void reset() {
@@ -76,7 +78,7 @@ public class GameStage extends BaseStage {
 	}
 
 	public void setWordCloudText(String text) {
-		if (!ttsListener.isSpeaking()) {
+		if (!ttsCtrl.isSpeaking()) {
 			wordFromMic = text;
 		}
 	}
@@ -97,11 +99,11 @@ public class GameStage extends BaseStage {
 				gamePass();
 			}
 		} else if (WordCloud.BOB_STATE_IDLE == bob.state
-				&& !ttsListener.isSpeaking()) {
+				&& !ttsCtrl.isSpeaking()) {
 			bob.reset();
 			wordFromMic = "";
 			iceberg.start();
-			ttsListener.startRecognizer();
+			recognizerCtrl.startRecognizer();
 		}
 
 		if (WordCloud.BOB_STATE_FLYING == bob.state) {
@@ -111,9 +113,9 @@ public class GameStage extends BaseStage {
 				iceberg.stop();
 			} else if (bob.position.y > Assets.VIRTUAL_HEIGHT * BOB_OVER) {
 				// word miss, first speak out, then renew word
-				if (null != ttsListener) {
-					ttsListener.stopRecognizer();
-					ttsListener.speakOut(bob.getWord());
+				if (null != recognizerCtrl) {
+					recognizerCtrl.stopRecognizer();
+					ttsCtrl.speakOut(bob.getWord());
 				}
 
 				bob.FlyOut();

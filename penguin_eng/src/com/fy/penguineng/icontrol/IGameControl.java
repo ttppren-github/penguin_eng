@@ -1,11 +1,6 @@
-package com.fy.penguineng;
+package com.fy.penguineng.icontrol;
 
 public interface IGameControl {
-	// TTS
-	public void speakOut(String word);
-
-	public boolean isSpeaking();
-
 	// Recognizer
 	public void startRecognizer();
 

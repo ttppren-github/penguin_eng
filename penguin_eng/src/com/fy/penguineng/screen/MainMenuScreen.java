@@ -106,8 +106,8 @@ public class MainMenuScreen implements Screen {
 			if (event.getListenerActor() == btnStart) {
 				game.setScreen(game.swichScreen);
 			} else if (event.getListenerActor() == btnExit) {
-				if (game.ttsListener != null) {
-					game.ttsListener.closeGame();
+				if (game.recognizerCtrl != null) {
+					game.recognizerCtrl.closeGame();
 				}
 			}
 		}
