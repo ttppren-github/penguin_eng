@@ -5,21 +5,18 @@ grammar digits;
 <digit> =	address               |
 			baby                |
 			call               |
-			dairy                |
-			ear                |
+			decide                |
+			defeat                |
+			delete              |
 			fail                 |
-			genius              |
 			hair               |
-			identical                |
 			jazz                |
 			kiss                   |
 			layer              |
-			magic               |
 			natural                |
 			office               |
-			pain                   |
 			go to cinema	|
-			have fun	|
+			genius              |
 			enjoy your life					 ;
 
           

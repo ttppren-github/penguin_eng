@@ -2,8 +2,7 @@
 
 grammar digits;
 
-<digit> =	hello               |
-			welcome                |
+<digit> =	welcome                |
 			good               |
 			thanks                |
 			boy                |
@@ -16,7 +15,6 @@ grammar digits;
 			happy              |
 			sleep               |
 			fast                |
-			how do you do                |
 			believe                   |
 			good night	|
 			have fun	|

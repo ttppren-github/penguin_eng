@@ -2,16 +2,14 @@
 
 grammar digits;
 
-<digit> =	advance               |
-			ball                |
+<digit> =	baby               |
+			bacteria                |
 			camera               |
 			dear                |
 			easy                |
 			file                |
-			grateful                 |
-			head              |
+			basketball                 |
 			impressive               |
-			joy                |
 			kind                |
 			learn                   |
 			market              |

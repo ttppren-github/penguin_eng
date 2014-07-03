@@ -2,8 +2,8 @@
 
 grammar digits;
 
-<digit> =	adjust               |
-			bag                |
+<digit> =	danger               |
+			decent                |
 			calm               |
 			damage                |
 			early                |
@@ -11,9 +11,7 @@ grammar digits;
 			glory              |
 			handsome               |
 			image                |
-			join                |
-			know                   |
-			lead              |
+			dark                |
 			manage               |
 			neighbor                |
 			opportunity              |

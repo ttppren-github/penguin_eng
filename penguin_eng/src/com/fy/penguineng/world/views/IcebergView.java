@@ -1,21 +1,26 @@
 package com.fy.penguineng.world.views;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
 import com.fy.penguineng.Assets;
+import com.fy.penguineng.FreetypeFontWrap;
 
 public class IcebergView extends BaseView {
 
-	private Pixmap cav;
+	public String strHeight;
+
+	private BitmapFont font;
 
 	public IcebergView(Rectangle bounds) {
 		bound = bounds;
-		cav = new Pixmap((int) bound.width, (int) bound.height, Format.RGBA8888);
-		cav.setColor(Color.BLACK);
+
+		FreetypeFontWrap fontFree = new FreetypeFontWrap();
+		font = fontFree.getFont("0123456789", 30);
+		font.setColor(Color.BLACK);
+
+		strHeight = new String("8848");
 	}
 
 	@Override
@@ -26,8 +31,11 @@ public class IcebergView extends BaseView {
 		batch.draw(assets.getTexture(Assets.ICEBERG), x, y, bound.width,
 				bound.height);
 
-		cav.drawLine(0, 6, (int) bound.width, 6);
-		cav.drawLine(20, 6, 20, (int) bound.height);
-		batch.draw(new Texture(cav), x, y, bound.width, bound.height);
+		batch.draw(assets.getTexture(Assets.Ruler), 340, y);
+		font.draw(batch, strHeight, 200, 760);
+	}
+
+	public void setHeight(String height) {
+		strHeight = height;
 	}
 }
