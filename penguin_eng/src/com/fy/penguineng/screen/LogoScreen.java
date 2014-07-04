@@ -5,7 +5,6 @@ package com.fy.penguineng.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SizeToAction;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.PenguinEng;
+import com.fy.penguineng.TtsCtrl;
 
 /**
  * @author liufy
@@ -26,6 +26,7 @@ public class LogoScreen implements Screen {
 	private BaseStage stage;
 	private float start;
 	private final float DELAY = 3; // 3s
+	private TtsCtrl player;
 
 	/**
 	 * 
@@ -38,7 +39,7 @@ public class LogoScreen implements Screen {
 		Assets.getInstance().preLoading();
 		logo = new Image(Assets.getInstance().logo);
 		name = new Image(Assets.getInstance().name);
-		
+
 		stage.addActor(logo);
 		stage.addActor(name);
 	}
@@ -53,9 +54,9 @@ public class LogoScreen implements Screen {
 		start += delta;
 		if (game.assets.update()) {
 			float ret = game.assets.getProgress();
-			if (ret == 1 && game.ttsListener != null && start > DELAY) {
+			if (ret == 1 && /* game.ttsListener != null && */start > DELAY) {
 				Gdx.app.log(TAG, "loading resource over.");
-				
+
 				game.resourceReady();
 			}
 		}
@@ -82,13 +83,15 @@ public class LogoScreen implements Screen {
 		sizeToAction.setDuration(2);
 		sizeToAction.setSize(logo.getWidth() / 2, logo.getHeight() / 2);
 		logo.addAction(sizeToAction);
-		
-		Music music = Gdx.audio.newMusic(Gdx.files.internal("sounds/welcome_starfish.ogg"));
-		music.play();
+
+		player = new TtsCtrl();
+		player.load("sounds/common/welcome_starfish.ogg");
+		player.speakOut();
 	}
 
 	@Override
 	public void hide() {
+		player.unload();
 	}
 
 	@Override

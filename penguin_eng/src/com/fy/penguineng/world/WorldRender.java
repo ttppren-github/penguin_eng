@@ -2,45 +2,52 @@ package com.fy.penguineng.world;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.fy.penguineng.Assets;
+import com.fy.penguineng.FreetypeFontWrap;
 import com.fy.penguineng.world.views.IcebergView;
 import com.fy.penguineng.world.views.MicPowerView;
 import com.fy.penguineng.world.views.WordCloudView;
 
 public class WorldRender {
-	float frustum_width;
-	float frustum_height;
+	private final String TT = "废气量";
+	private final String HH = "雪山高度";
+	private final int FontSize = 18;
 
+	private float frustum_width;
+	private float frustum_height;
 	private WordCloudView bobView;
 	private IcebergView icebergView;
 	private MicPowerView micPowerView;
 	private GameStage world;
-	private Label outGas;
-	private Image gasImg;
+	private Label outGas, icebergHeight;
+	private FreetypeFontWrap ft;
 
 	public WorldRender(GameStage world) {
+		frustum_width = Assets.VIRTUAL_WIDTH;
+		frustum_height = Assets.VIRTUAL_HEIGHT;
+
+		this.world = world;
+
 		bobView = new WordCloudView();
 		icebergView = new IcebergView(world.iceberg.bounds);
 		micPowerView = new MicPowerView();
 		micPowerView.setPosition(world.micPower.position);
 
-		gasImg = new Image(Assets.getInstance().getTexture(Assets.CLOUD));
-		gasImg.setBounds(20, 740, 36, 36);
-		world.addActor(gasImg);
-		
+		ft = new FreetypeFontWrap();
 		LabelStyle tfStyle = new LabelStyle();
-		tfStyle.font = Assets.getInstance().getFont();
-		tfStyle.fontColor = Color.RED;
-		outGas = new Label("0", tfStyle);
-		outGas.setBounds(60, 730, 100, 60);
+		tfStyle.font = ft.getFont(TT + HH + "0123456789", FontSize);
+		tfStyle.fontColor = Color.BLACK;
+		outGas = new Label(TT + "0", tfStyle);
+		outGas.setBounds(20, 730, 100, 60);
 		world.addActor(outGas);
 
-		frustum_width = Assets.VIRTUAL_WIDTH;
-		frustum_height = Assets.VIRTUAL_HEIGHT;
-		this.world = world;
+		icebergHeight = new Label("8848", tfStyle);
+		icebergHeight.setBounds(
+				(frustum_width - (HH.length() + 2) * FontSize) / 2, 730, 100,
+				60);
+		world.addActor(icebergHeight);
 	}
 
 	public void render(Batch batch) {
@@ -61,7 +68,6 @@ public class WorldRender {
 		micPowerView.render(batch);
 
 		icebergView.setPosition(world.iceberg.position);
-		icebergView.setHeight(String.valueOf(world.iceberg.mHeight));
 		icebergView.render(batch);
 
 		bobView.setBound(world.bob.bounds);
@@ -69,6 +75,11 @@ public class WorldRender {
 		bobView.setText(world.bob.getWord());
 		bobView.render(batch);
 
-		outGas.setText(String.valueOf(world.outValue));
+		outGas.setText(TT + " " + String.valueOf(world.outValue));
+		icebergHeight.setText(HH + " " + String.valueOf(world.iceberg.mHeight));
+	}
+
+	public void dispose() {
+		ft.dispose();
 	}
 }

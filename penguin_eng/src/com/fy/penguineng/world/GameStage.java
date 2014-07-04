@@ -5,8 +5,8 @@ package com.fy.penguineng.world;
 
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.BaseStage;
+import com.fy.penguineng.TtsCtrl;
 import com.fy.penguineng.icontrol.IGameControl;
-import com.fy.penguineng.icontrol.ITtsCtrl;
 import com.fy.penguineng.world.modules.Iceberg;
 import com.fy.penguineng.world.modules.MicPower;
 import com.fy.penguineng.world.modules.WordCloud;
@@ -31,8 +31,12 @@ public class GameStage extends BaseStage {
 	private IPlayStateListener playStateListener;
 	private int volume;
 	private IGameControl recognizerCtrl;
-	private ITtsCtrl ttsCtrl;
 	private String wordFromMic;
+	private TtsCtrl[] goodS;
+	private int correctCnt;
+	private final String[] soundR = { "sounds/common/good.ogg",
+			"sounds/common/great.ogg", "sounds/common/lovely.ogg",
+			"sounds/common/wonderful.ogg", "sounds/common/awesome.ogg" };
 
 	public interface IPlayStateListener {
 		public void gameOver();
@@ -53,6 +57,13 @@ public class GameStage extends BaseStage {
 
 		render = new WorldRender(this);
 		this.recognizerCtrl = ttsListener;
+
+		goodS = new TtsCtrl[5];
+		for (int i = 0; i < soundR.length; i++) {
+			goodS[i] = new TtsCtrl();
+			goodS[i].load(soundR[i]);
+		}
+		correctCnt = 0;
 	}
 
 	public void reset() {
@@ -81,7 +92,7 @@ public class GameStage extends BaseStage {
 	}
 
 	public void setWordCloudText(String text) {
-		if (!ttsCtrl.isSpeaking()) {
+		if (!bob.isSpeaking()) {
 			wordFromMic = text;
 		}
 	}
@@ -101,29 +112,33 @@ public class GameStage extends BaseStage {
 				bob.state = WordCloud.BOB_STATE_IDLE;
 				gamePass();
 			}
-		} else if (WordCloud.BOB_STATE_IDLE == bob.state
-				&& !ttsCtrl.isSpeaking()) {
+		} else if (WordCloud.BOB_STATE_IDLE == bob.state && !bob.isSpeaking()) {
 			bob.reset();
 			wordFromMic = "";
 			iceberg.start();
-			recognizerCtrl.startRecognizer();
+			if (null != recognizerCtrl) {
+				recognizerCtrl.startRecognizer();
+			}
 		}
 
 		if (WordCloud.BOB_STATE_FLYING == bob.state) {
 			// Check word
 			if (bob.getWord().matches(wordFromMic)) {
 				bob.hit();
+				correctCnt++;
 				iceberg.stop();
 			} else if (bob.position.y > Assets.VIRTUAL_HEIGHT * BOB_OVER) {
 				// word miss, first speak out, then renew word
 				if (null != recognizerCtrl) {
 					recognizerCtrl.stopRecognizer();
-					ttsCtrl.speakOut(bob.getWord());
 				}
 
 				bob.FlyOut();
+				bob.speak();
 				temperature += 1;
 
+				correctCnt = 0;
+				outValue += bob.getWord().replace(" ", "").length();
 				iceberg.stop();
 			}
 		}
@@ -137,6 +152,10 @@ public class GameStage extends BaseStage {
 		if (bob.state == WordCloud.BOB_STATE_HIT
 				|| WordCloud.BOB_STATE_FLYING == bob.state) {
 			bob.update(deltaTime);
+		}
+
+		if (correctCnt > 1) {
+			goodS[correctCnt / 4].speakOut();
 		}
 
 	}
@@ -164,4 +183,15 @@ public class GameStage extends BaseStage {
 
 		playStateListener.gamePass();
 	}
+
+	@Override
+	public void dispose() {
+		for (int i = 0; i < goodS.length; i++) {
+			goodS[i].unload();
+		}
+
+		render.dispose();
+		super.dispose();
+	}
+
 }

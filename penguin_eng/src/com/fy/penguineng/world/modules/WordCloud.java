@@ -1,6 +1,8 @@
 package com.fy.penguineng.world.modules;
 
 import com.fy.penguineng.Assets;
+import com.fy.penguineng.TtsCtrl;
+import com.fy.penguineng.icontrol.ITtsCtrl;
 import com.fy.penguineng.world.WordPool;
 
 public class WordCloud extends ActiveObject {
@@ -15,14 +17,15 @@ public class WordCloud extends ActiveObject {
 
 	public int state;
 	public WordPool pool;
-	float stateTime;
-	String word;
-	float startX, startY;
+
+	private ITtsCtrl speaker;
+	private String word;
+	private float startX, startY;
 
 	public WordCloud(float x, float y) {
 		super(x, y, BOB_WIDTH, BOB_HEIGHT);
 		state = BOB_STATE_IDLE;
-		stateTime = 0;
+
 		startX = x;
 		startY = y;
 		this.velocity.x = 0;
@@ -30,6 +33,8 @@ public class WordCloud extends ActiveObject {
 		this.bounds.height = Assets.LETTER_HEIGHT + BOB_HEIGHT * 2;
 
 		pool = WordPool.getInstance();
+
+		speaker = new TtsCtrl();
 	}
 
 	public void update(float deltaTime) {
@@ -48,8 +53,6 @@ public class WordCloud extends ActiveObject {
 			bounds.y = position.y - BOB_HEIGHT * 2;
 		}
 
-		stateTime += deltaTime;
-
 		if (BOB_STATE_IDLE == state) {
 			return;
 		}
@@ -57,24 +60,24 @@ public class WordCloud extends ActiveObject {
 
 	public void hit() {
 		state = BOB_STATE_HIT;
-		stateTime = 0;
 		pool.hit(word);
 	}
 
 	public void reset() {
 		this.word = pool.mining();
 		state = BOB_STATE_FLYING;
-		stateTime = 0;
+
 		this.position.x = this.startX - word.length() / 2 * 10;
 		this.position.y = this.startY;
 		this.bounds.x = this.position.x - BOB_WIDTH;
 		this.bounds.y = this.position.y - BOB_HEIGHT * 2;
 		this.bounds.width = Assets.LETTER_WIDTH * word.length() + BOB_WIDTH * 2;
+
+		speaker.unload();
 	}
 
 	public void FlyOut() {
 		state = BOB_STATE_IDLE;
-		stateTime = 0;
 	}
 
 	public int getState() {
@@ -83,5 +86,16 @@ public class WordCloud extends ActiveObject {
 
 	public String getWord() {
 		return this.word;
+	}
+
+	public boolean isSpeaking() {
+		return speaker.isSpeaking();
+	}
+
+	public void speak() {
+		String path = "sounds/" + pool.getStage() + "/" + word.replace(" ", "")
+				+ ".ogg";
+		speaker.load(path);
+		speaker.speakOut();
 	}
 }

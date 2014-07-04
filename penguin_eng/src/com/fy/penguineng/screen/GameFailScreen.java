@@ -20,6 +20,8 @@ import com.fy.penguineng.Assets;
 import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.FreetypeFontWrap;
 import com.fy.penguineng.PenguinEng;
+import com.fy.penguineng.TtsCtrl;
+import com.fy.penguineng.icontrol.ITtsCtrl;
 import com.fy.penguineng.world.WordPool;
 
 /**
@@ -37,6 +39,7 @@ public class GameFailScreen implements Screen {
 	private List list;
 	private TextArea tx;
 	private String selectedWord;
+	private ITtsCtrl speaker;
 
 	/**
 	 * 
@@ -87,6 +90,8 @@ public class GameFailScreen implements Screen {
 
 		stage.addActor(tx);
 		stage.addActor(tableRoot);
+
+		speaker = new TtsCtrl();
 	}
 
 	@Override
@@ -155,8 +160,12 @@ public class GameFailScreen implements Screen {
 				WordPool.getInstance().reload();
 				gameMain.setScreen(gameMain.gameScreen);
 			} else if (event.getListenerActor() == btnVoice) {
-				if (gameMain.recognizerCtrl != null) {
-					gameMain.ttsCtrl.speakOut(selectedWord);
+				if (speaker != null) {
+					String path = "sounds/" + WordPool.getInstance().getStage()
+							+ "/" + selectedWord.replace(" ", "") + ".ogg";
+					speaker.unload();
+					speaker.load(path);
+					speaker.speakOut();
 				}
 			}
 		}

@@ -14,6 +14,7 @@ public class WordPool {
 	private static WordPool instance;
 	private Array<String> words;
 	private JsonValue val;
+	private String fileName;
 
 	private WordPool() {
 		words = new Array<String>();
@@ -71,6 +72,8 @@ public class WordPool {
 				words.add(word);
 			}
 		}
+
+		this.fileName = fileName;
 	}
 
 	public void reload() {
@@ -120,5 +123,13 @@ public class WordPool {
 		}
 
 		return ret;
+	}
+
+	public String getStage() {
+		if (fileName != null && fileName.length() > 1) {
+			return fileName.substring(4, 5);
+		}
+
+		return "0";
 	}
 }

@@ -5,25 +5,37 @@ import com.badlogic.gdx.audio.Music;
 import com.fy.penguineng.icontrol.ITtsCtrl;
 
 public class TtsCtrl implements ITtsCtrl {
-
-	private TtsCtrl instance;
+	private final String TAG = TtsCtrl.class.getSimpleName();
 	private Music music;
 
-	private TtsCtrl() {
+	public TtsCtrl() {
 		music = null;
 	}
 
-	public TtsCtrl getInstance() {
-		if (null == instance) {
-			instance = new TtsCtrl();
+	public void load(String src) {
+		music = null;
+		try {
+			music = Gdx.audio.newMusic(Gdx.files.internal(src));
+			music.setVolume(1.0f);
+		} catch (Exception e) {
+			Gdx.app.log(TAG, "load error: " + src);
 		}
 
-		return instance;
+	}
+
+	public void unload() {
+		if (null != music) {
+			music.stop();
+			music.dispose();
+			music = null;
+		}
 	}
 
 	@Override
-	public void speakOut(String word) {
-
+	public void speakOut() {
+		if (null != music) {
+			music.play();
+		}
 	}
 
 	@Override
