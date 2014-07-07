@@ -3,7 +3,6 @@
  */
 package com.fy.penguineng;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
@@ -67,8 +66,19 @@ public class ScoreManager implements IScoreManager {
 	 */
 	@Override
 	public void setScores(int stage, int score) {
-		// TODO Auto-generated method stub
+		int i;
+		for (i = 0; i < scores.size(); i++) {
+			if (scores.getScore(i).stage == stage) {
+				scores.getScore(i).score = score;
+				break;
+			}
+		}
 
+		if (scores.size() == i) {
+			scores.setScore(stage, score);
+		}
+
+		syncJson();
 	}
 
 	private void loadJson(String fileName) {
@@ -76,8 +86,7 @@ public class ScoreManager implements IScoreManager {
 		if (!f.exists()) {
 			syncJson();
 		}
-		// Json json = new Json();
-		// scores = json.fromJson(ScoreFactory.class, f);
+
 		JsonReader json = new JsonReader();
 		JsonValue valRoot = json.parse(f);
 		JsonValue val = valRoot.get("scores");

@@ -5,8 +5,10 @@ package com.fy.penguineng.world;
 
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.BaseStage;
+import com.fy.penguineng.ScoreManager;
 import com.fy.penguineng.TtsCtrl;
 import com.fy.penguineng.icontrol.IGameControl;
+import com.fy.penguineng.icontrol.IScoreManager;
 import com.fy.penguineng.world.modules.Iceberg;
 import com.fy.penguineng.world.modules.MicPower;
 import com.fy.penguineng.world.modules.WordCloud;
@@ -38,6 +40,8 @@ public class GameStage extends BaseStage {
 			"sounds/common/great.ogg", "sounds/common/lovely.ogg",
 			"sounds/common/wonderful.ogg", "sounds/common/awesome.ogg" };
 
+	private IScoreManager scoreMgr;
+
 	public interface IPlayStateListener {
 		public void gameOver();
 
@@ -64,6 +68,8 @@ public class GameStage extends BaseStage {
 			goodS[i].load(soundR[i]);
 		}
 		correctCnt = 0;
+
+		scoreMgr = ScoreManager.getInstance();
 	}
 
 	public void reset() {
@@ -180,6 +186,10 @@ public class GameStage extends BaseStage {
 		if (playStateListener == null) {
 			throw new NullPointerException();
 		}
+
+		int socres = 8848 - temperature * outValue;
+		scoreMgr.setScores(Integer.valueOf(WordPool.getInstance().getStage()),
+				socres);
 
 		playStateListener.gamePass();
 	}
