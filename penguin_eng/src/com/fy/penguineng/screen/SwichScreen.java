@@ -19,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.PenguinEng;
+import com.fy.penguineng.ScoreManager;
+import com.fy.penguineng.icontrol.IScoreManager;
 import com.fy.penguineng.world.WordPool;
 
 /**
@@ -31,6 +33,7 @@ public class SwichScreen implements Screen {
 	private Image bg;
 	private ImageButton btnReturn;
 	private ArrayList<ImageButton> groups;
+	private Label[] labs;
 
 	/**
 	 * 
@@ -56,13 +59,16 @@ public class SwichScreen implements Screen {
 			}
 		});
 
+		IScoreManager sm = ScoreManager.getInstance();
+		labs = new Label[5];
 		Table tab = new Table(assets.skin);
 		for (int i = 0; i < 5; i++) {
 			ImageButton tBtn = new ImageButton(assets.skin, Assets.BtnStar);
 			tBtn.sizeBy(72, 72);
-			Label lab = new Label(Integer.toString(i + 1), assets.skin,
-					Assets.FONT);
-			tBtn.add(lab);
+
+			labs[i] = new Label(Integer.toString(sm.getLevel(i + 1)),
+					assets.skin, Assets.FONT);
+			tBtn.add(labs[i]);
 			tab.add(tBtn).pad(20);
 			if (i == 2) {
 				tab.row();
@@ -108,6 +114,8 @@ public class SwichScreen implements Screen {
 
 	@Override
 	public void show() {
+		refreshStat();
+
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage);
 		inputMultiplexer.addProcessor(new ScreenInputHandler());
@@ -188,6 +196,13 @@ public class SwichScreen implements Screen {
 		public boolean scrolled(int amount) {
 			// TODO Auto-generated method stub
 			return false;
+		}
+	}
+
+	private void refreshStat() {
+		IScoreManager sm = ScoreManager.getInstance();
+		for (int i = 0; i < 5; i++) {
+			labs[i].setText(Integer.toString(sm.getLevel(i + 1)));
 		}
 	}
 }

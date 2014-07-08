@@ -19,6 +19,8 @@ import com.fy.penguineng.icontrol.IScoreManager;
  */
 public class ScoreManager implements IScoreManager {
 	private final String NAME = "score.json";
+	private final int HL = 8348;
+	private final int ML = 7348;
 
 	private static ScoreManager instance;
 	private ScoreFactory scores;
@@ -131,6 +133,27 @@ public class ScoreManager implements IScoreManager {
 		public int size() {
 			return scores.size();
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.fy.penguineng.icontrol.IScoreManager#getLevel(int)
+	 */
+	@Override
+	public int getLevel(int stage) {
+		int ret;
+		int v = getScores(stage);
+
+		if (v >= HL) {
+			ret = 2;
+		} else if (v >= ML && v < HL) {
+			ret = 1;
+		} else {
+			ret = 0;
+		}
+
+		return ret;
 	}
 
 }

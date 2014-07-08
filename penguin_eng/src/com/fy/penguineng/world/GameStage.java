@@ -187,7 +187,7 @@ public class GameStage extends BaseStage {
 			throw new NullPointerException();
 		}
 
-		int socres = 8848 - temperature * outValue;
+		int socres = iceberg.mHeight - temperature * outValue;
 		scoreMgr.setScores(Integer.valueOf(WordPool.getInstance().getStage()),
 				socres);
 

@@ -3,7 +3,6 @@ package com.fy.penguineng;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.fy.penguineng.icontrol.IGameControl;
 import com.fy.penguineng.icontrol.ITtsCtrl;
@@ -22,7 +21,7 @@ public class PenguinEng extends Game {
 	public MainMenuScreen mainScreen;
 
 	private LogoScreen logoScreen;
-	private FPSLogger fps;
+//	private FPSLogger fps;
 	private String text;
 	public Assets assets;
 
@@ -40,7 +39,7 @@ public class PenguinEng extends Game {
 		this.setScreen(logoScreen);
 
 		assets.loadResources();
-		fps = new FPSLogger();
+//		fps = new FPSLogger();
 	}
 
 	@Override
@@ -90,6 +89,7 @@ public class PenguinEng extends Game {
 		gamePassScreen = new GamePassScreen(this);
 		gameFailScreen = new GameFailScreen(this);
 
+		// If first run, show welcome screen.
 		if (null == recognizerCtrl || !recognizerCtrl.checkFirstRun()) {
 			setScreen(mainScreen);
 		}

@@ -21,4 +21,8 @@ public interface IScoreManager {
 	 */
 	public void setScores(int stage, int score);
 
+	/**
+	 * @return
+	 */
+	public int getLevel(int stage);
 }
