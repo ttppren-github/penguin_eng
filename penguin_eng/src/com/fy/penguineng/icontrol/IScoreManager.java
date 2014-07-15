@@ -25,4 +25,14 @@ public interface IScoreManager {
 	 * @return
 	 */
 	public int getLevel(int stage);
+
+	/**
+	 * @return Count of all game
+	 */
+	public int getStageCount();
+
+	/**
+	 * @return Count of passed game
+	 */
+	public int getPassCount();
 }

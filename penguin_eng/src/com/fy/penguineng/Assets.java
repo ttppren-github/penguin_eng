@@ -199,6 +199,10 @@ public class Assets {
 		ImageButtonStyle star = new ImageButtonStyle();
 		star.up = new TextureRegionDrawable(new TextureRegion(manager.get(
 				BtnStar, Texture.class)));
+		
+		ImageButtonStyle lockStar = new ImageButtonStyle();
+		lockStar.up = new TextureRegionDrawable(new TextureRegion(manager.get(
+				LockStar, Texture.class)));
 
 		ListStyle listStyle = new ListStyle();
 		listStyle.fontColorSelected = Color.RED;
@@ -215,6 +219,7 @@ public class Assets {
 		skin.add(Btn, btnStyle);
 		skin.add(BtnReturn, imgBtnStyle);
 		skin.add(BtnStar, star);
+		skin.add(LockStar, lockStar);
 		skin.add(ListView, listStyle);
 	}
 }

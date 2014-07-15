@@ -34,6 +34,7 @@ public class SwichScreen implements Screen {
 	private ImageButton btnReturn;
 	private ArrayList<ImageButton> groups;
 	private Label[] labs;
+	private Table tab;
 
 	/**
 	 * 
@@ -59,43 +60,7 @@ public class SwichScreen implements Screen {
 			}
 		});
 
-		IScoreManager sm = ScoreManager.getInstance();
-		labs = new Label[5];
-		Table tab = new Table(assets.skin);
-		for (int i = 0; i < 5; i++) {
-			ImageButton tBtn = new ImageButton(assets.skin, Assets.BtnStar);
-			tBtn.sizeBy(72, 72);
-
-			labs[i] = new Label(Integer.toString(sm.getLevel(i + 1)),
-					assets.skin, Assets.FONT);
-			tBtn.add(labs[i]);
-			tab.add(tBtn).pad(20);
-			if (i == 2) {
-				tab.row();
-			}
-
-			tBtn.addListener(new ClickListener() {
-
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					int i = groups.indexOf(event.getListenerActor()) + 1;
-
-					WordPool pool = WordPool.getInstance();
-					String str = String.format("dic/%dstage_dic.json", i);
-					pool.loadJson(str);
-
-					if (gameMain.recognizerCtrl != null) {
-						String gram = String.format(
-								"models/grammar/words/%dstage.gram", i);
-						gameMain.recognizerCtrl.loadGrammar(gram);
-					}
-
-					gameMain.setScreen(gameMain.gameScreen);
-				}
-			});
-			groups.add(tBtn);
-		}
-		tab.add(new Image(assets.getTexture(Assets.LockStar)));
+		tab = new Table(assets.skin);
 		tab.setPosition((float) (Assets.VIRTUAL_WIDTH - tab.getWidth()) / 2,
 				(float) (Assets.VIRTUAL_HEIGHT * 0.65 - tab.getHeight()));
 		stage.addActor(tab);
@@ -201,8 +166,58 @@ public class SwichScreen implements Screen {
 
 	private void refreshStat() {
 		IScoreManager sm = ScoreManager.getInstance();
-		for (int i = 0; i < 5; i++) {
-			labs[i].setText(Integer.toString(sm.getLevel(i + 1)));
+		Assets assets = Assets.getInstance();
+
+		int gameCnt = sm.getStageCount();
+		int passCnt = sm.getPassCount();
+		labs = new Label[gameCnt];
+
+		tab.clearChildren();
+
+		for (int i = 0; i < gameCnt; i++) {
+			ImageButton tBtn;
+
+			if (0 == i % 3) {
+				tab.row();
+			}
+
+			// add star
+			if (i > passCnt) {
+				tBtn = new ImageButton(assets.skin, Assets.LockStar);
+			} else {
+				tBtn = new ImageButton(assets.skin, Assets.BtnStar);
+			}
+			tBtn.sizeBy(72, 72);
+			tab.add(tBtn).pad(20);
+
+			if (i > passCnt) {
+				continue;
+			}
+
+			labs[i] = new Label(Integer.toString(sm.getLevel(i + 1)),
+					assets.skin, Assets.FONT);
+			tBtn.add(labs[i]);
+
+			tBtn.addListener(new ClickListener() {
+
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					int i = groups.indexOf(event.getListenerActor()) + 1;
+
+					WordPool pool = WordPool.getInstance();
+					String str = String.format("dic/%dstage_dic.json", i);
+					pool.loadJson(str);
+
+					if (gameMain.recognizerCtrl != null) {
+						String gram = String.format(
+								"models/grammar/words/%dstage.gram", i);
+						gameMain.recognizerCtrl.loadGrammar(gram);
+					}
+
+					gameMain.setScreen(gameMain.gameScreen);
+				}
+			});
+			groups.add(tBtn);
 		}
 	}
 }

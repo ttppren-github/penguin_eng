@@ -24,6 +24,7 @@ public class ScoreManager implements IScoreManager {
 
 	private static ScoreManager instance;
 	private ScoreFactory scores;
+	private int gameCnt;
 
 	private ScoreManager() {
 		scores = new ScoreFactory();
@@ -133,6 +134,17 @@ public class ScoreManager implements IScoreManager {
 		public int size() {
 			return scores.size();
 		}
+
+		public int getPassCnt() {
+			int cnt = 0;
+			for (Score tmp : scores) {
+				if (tmp.score > 0) {
+					cnt++;
+				}
+			}
+
+			return cnt;
+		}
 	}
 
 	/*
@@ -145,15 +157,35 @@ public class ScoreManager implements IScoreManager {
 		int ret;
 		int v = getScores(stage);
 
-		if (v >= HL) {
-			ret = 2;
-		} else if (v >= ML && v < HL) {
-			ret = 1;
-		} else {
+		if (0 == v) {
 			ret = 0;
+		} else if (v >= HL) {
+			ret = 3;
+		} else if (v >= ML && v < HL) {
+			ret = 2;
+		} else {
+			ret = 1;
 		}
 
 		return ret;
+	}
+
+	@Override
+	public int getStageCount() {
+		if (null != scores) {
+			return scores.size();
+		}
+
+		return 0;
+	}
+
+	@Override
+	public int getPassCount() {
+		if (null == scores) {
+			return 0;
+		}
+
+		return scores.getPassCnt();
 	}
 
 }
