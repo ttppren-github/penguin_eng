@@ -24,7 +24,6 @@ public class ScoreManager implements IScoreManager {
 
 	private static ScoreManager instance;
 	private ScoreFactory scores;
-	private int gameCnt;
 
 	private ScoreManager() {
 		scores = new ScoreFactory();
@@ -87,7 +86,12 @@ public class ScoreManager implements IScoreManager {
 	private void loadJson(String fileName) {
 		FileHandle f = Gdx.files.local(NAME);
 		if (!f.exists()) {
+			for (int i = 0; i < 5; i++) {
+				scores.setScore(i, 0);
+			}
+
 			syncJson();
+			scores.clear();
 		}
 
 		JsonReader json = new JsonReader();
@@ -144,6 +148,10 @@ public class ScoreManager implements IScoreManager {
 			}
 
 			return cnt;
+		}
+
+		public void clear() {
+			scores.clear();
 		}
 	}
 
