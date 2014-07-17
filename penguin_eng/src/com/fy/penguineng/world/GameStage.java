@@ -133,6 +133,10 @@ public class GameStage extends BaseStage {
 				bob.hit();
 				correctCnt++;
 				iceberg.stop();
+		
+				if (correctCnt > 1) {
+					goodS[correctCnt / 4].speakOut();
+				}
 			} else if (bob.position.y > Assets.VIRTUAL_HEIGHT * BOB_OVER) {
 				// word miss, first speak out, then renew word
 				if (null != recognizerCtrl) {
@@ -149,6 +153,7 @@ public class GameStage extends BaseStage {
 			}
 		}
 
+		// Check if word disappear after read right
 		if (WordCloud.BOB_STATE_HIT == bob.state) {
 			if (bob.position.x + bob.bounds.width < 0) {
 				bob.FlyOut();
@@ -160,9 +165,6 @@ public class GameStage extends BaseStage {
 			bob.update(deltaTime);
 		}
 
-		if (correctCnt > 1) {
-			goodS[correctCnt / 4].speakOut();
-		}
 
 	}
 
