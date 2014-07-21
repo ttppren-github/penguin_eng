@@ -134,7 +134,7 @@ public class GameStage extends BaseStage {
 				correctCnt++;
 				iceberg.stop();
 		
-				if (correctCnt > 1) {
+				if (correctCnt > 0) {
 					goodS[correctCnt / 4].speakOut();
 				}
 			} else if (bob.position.y > Assets.VIRTUAL_HEIGHT * BOB_OVER) {

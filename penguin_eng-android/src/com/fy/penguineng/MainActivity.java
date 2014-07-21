@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
+import android.view.WindowManager;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -38,6 +39,7 @@ public class MainActivity extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		ctx = this;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); 
 
 		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
 		game = new PenguinEng();

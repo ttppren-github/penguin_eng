@@ -17,7 +17,7 @@ grammar digits;
 			observe                |
 			thank you	|
 			i love you  |
-			do me a favor		
+			do me a favor  |
 			deny                	 ;
 
           
