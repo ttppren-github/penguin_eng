@@ -184,9 +184,9 @@ public class Assets {
 
 	public void loadStyle() {
 		ButtonStyle btnStyle = new ButtonStyle();
-		btnStyle.up = new TextureRegionDrawable(new TextureRegion(manager.get(
+		btnStyle.over = new TextureRegionDrawable(new TextureRegion(manager.get(
 				btnNormal, Texture.class)));
-		btnStyle.over = new TextureRegionDrawable(new TextureRegion(
+		btnStyle.up = new TextureRegionDrawable(new TextureRegion(
 				manager.get(btnPressed, Texture.class)));
 
 		LabelStyle labelStyle = new LabelStyle((BitmapFont) manager.get(FONT),
