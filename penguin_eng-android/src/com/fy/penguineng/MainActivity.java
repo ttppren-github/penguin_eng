@@ -39,7 +39,7 @@ public class MainActivity extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		ctx = this;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); 
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
 		game = new PenguinEng();
@@ -107,11 +107,6 @@ public class MainActivity extends AndroidApplication {
 		@Override
 		public void stopRecognizer() {
 			recognizer.stop();
-		}
-
-		@Override
-		public void closeGame() {
-			finish();
 		}
 
 		@Override

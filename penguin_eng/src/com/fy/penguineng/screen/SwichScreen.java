@@ -10,7 +10,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
@@ -72,7 +71,8 @@ public class SwichScreen implements Screen {
 		tab.setHeight(600);
 		tab.setPosition((float) (Assets.VIRTUAL_WIDTH - tab.getWidth()) / 2,
 				(float) (Assets.VIRTUAL_HEIGHT - tab.getHeight()) / 2);
-
+		tab.align(BaseTableLayout.TOP | BaseTableLayout.LEFT);
+		
 		Pixmap pm = new Pixmap(380, 600, Format.RGBA8888);
 		pm.setColor(0.28f, 0.63f, 0.97f, 0.4f);
 		pm.fill();
@@ -193,9 +193,9 @@ public class SwichScreen implements Screen {
 		for (int i = 0; i < gameCnt; i++) {
 			ImageButton tBtn;
 
-//			if (0 == (i + 1) % 4) {
-//				tab.row();
-//			}
+			if (0 == (i + 1) % 4) {
+				tab.row();
+			}
 
 			// add star
 			if (i > passCnt) {
@@ -203,7 +203,7 @@ public class SwichScreen implements Screen {
 			} else {
 				tBtn = new ImageButton(assets.skin, Assets.BtnStar);
 			}
-			tab.add(tBtn).width(120).pad(10);
+			tab.add(tBtn).width(110).pad(10);
 
 			if (i > passCnt) {
 				continue;

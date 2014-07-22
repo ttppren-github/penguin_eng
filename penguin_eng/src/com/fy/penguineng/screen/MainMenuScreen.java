@@ -9,7 +9,12 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -17,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.FreetypeFontWrap;
@@ -30,9 +36,11 @@ public class MainMenuScreen implements Screen {
 
 	private BaseStage stage;
 	private PenguinEng game;
-	private Button btnStart;
+	private Button btnStart, btnOk, btnCancel;
 	private Image bg;
 	private FreetypeFontWrap font;
+	private LabelStyle labelStyle;
+	private Window window;
 
 	/**
 	 * 
@@ -46,8 +54,7 @@ public class MainMenuScreen implements Screen {
 		stage.addActor(bg);
 
 		font = new FreetypeFontWrap();
-		LabelStyle labelStyle = new LabelStyle(font.getFont("开始退出"),
-				Color.BLACK);
+		labelStyle = new LabelStyle(font.getFont("开始确认取消"), Color.BLACK);
 
 		Label lab = new Label("开始", labelStyle);
 		btnStart = new Button(assets.skin, Assets.Btn);
@@ -106,6 +113,10 @@ public class MainMenuScreen implements Screen {
 		public void clicked(InputEvent event, float x, float y) {
 			if (event.getListenerActor() == btnStart) {
 				game.setScreen(game.swichScreen);
+			} else if (event.getListenerActor() == btnOk) {
+				Gdx.app.exit();
+			} else if (event.getListenerActor() == btnCancel) {
+				window.remove();
 			}
 		}
 
@@ -115,25 +126,41 @@ public class MainMenuScreen implements Screen {
 
 		@Override
 		public boolean keyDown(int keycode) {
-			if (keycode == Keys.BACK || keycode == Keys.BACKSPACE) {
-				 if (game.recognizerCtrl != null) {
-				 game.recognizerCtrl.closeGame();
-				 }
-				// Assets assets = Assets.getInstance();
-				//
-				// WindowStyle style = new WindowStyle(assets.getFont(),
-				// Color.BLACK, null);
-				// Window window = new Window("Hello libgdx game", style);
-				//
-				// window.setWidth(Gdx.graphics.getWidth() / 2);
-				// window.setHeight(Gdx.graphics.getHeight() / 3);
-				// window.setPosition(100, 200);
-				// window.setModal(true);
-				//
-				// Button ok = new Button(assets.skin, assets.BtnReturn);
-				// window.addActor(ok);
-				//
-				// stage.addActor(window);
+			if (keycode == Keys.BACK || keycode == Keys.BACKSPACE
+					|| Keys.ESCAPE == keycode) {
+				Assets assets = Assets.getInstance();
+				WindowStyle style = new WindowStyle(assets.getFont(),
+						Color.BLACK, null);
+				style.titleFont = font.getFont("确认退出？");
+				window = new Window("确认退出么？", style);
+
+				window.setWidth(400);
+				window.setHeight(200);
+				window.setPosition(40, 200);
+				window.setModal(true);
+				window.defaults().padTop(50);
+
+				Pixmap pm = new Pixmap(380, 600, Format.RGBA8888);
+				pm.setColor(0.28f, 0.63f, 0.97f, 1f);
+				pm.fill();
+				TextureRegion bg = new TextureRegion(new Texture(pm));
+				window.setBackground(new TextureRegionDrawable(bg));
+
+				btnOk = new Button(assets.skin, Assets.Btn);
+				Label lab = new Label("确认", labelStyle);
+				btnOk.add(lab);
+				btnOk.addListener(clicListener);
+				btnOk.setPosition(80, 70);
+				window.addActor(btnOk);
+
+				btnCancel = new Button(assets.skin, Assets.Btn);
+				Label lab2 = new Label("取消", labelStyle);
+				btnCancel.add(lab2);
+				btnCancel.setPosition(80, 20);
+				btnCancel.addListener(clicListener);
+				window.addActor(btnCancel);
+
+				stage.addActor(window);
 			}
 			return false;
 		}

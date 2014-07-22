@@ -8,9 +8,6 @@ public interface IGameControl {
 
 	public void loadGrammar(String file);
 
-	// UI Contrl
-	public void closeGame();
-
 	public boolean checkFirstRun();
 
 }
