@@ -81,7 +81,7 @@ public class LogoScreen implements Screen {
 
 		SizeToAction sizeToAction = new SizeToAction();
 		sizeToAction.setDuration(2);
-		sizeToAction.setSize(logo.getWidth() / 2, logo.getHeight() / 2);
+		sizeToAction.setSize(logo.getWidth() * 0.75f, logo.getHeight() * 0.75f);
 		logo.addAction(sizeToAction);
 
 		player = new TtsCtrl();
