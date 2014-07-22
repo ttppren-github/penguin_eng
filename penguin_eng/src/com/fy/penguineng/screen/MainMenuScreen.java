@@ -52,7 +52,7 @@ public class MainMenuScreen implements Screen {
 		Label lab = new Label("开始", labelStyle);
 		btnStart = new Button(assets.skin, Assets.Btn);
 		btnStart.add(lab);
-		btnStart.setPosition(120, 320);
+		btnStart.setPosition(120, 220);
 		stage.addActor(btnStart);
 		btnStart.addListener(clicListener);
 	}
