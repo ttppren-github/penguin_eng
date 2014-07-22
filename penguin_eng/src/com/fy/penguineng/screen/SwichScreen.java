@@ -10,12 +10,19 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.esotericsoftware.tablelayout.BaseTableLayout;
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.PenguinEng;
@@ -50,7 +57,7 @@ public class SwichScreen implements Screen {
 		stage.addActor(bg);
 
 		btnReturn = new ImageButton(assets.skin, Assets.BtnReturn);
-		btnReturn.setPosition(20, (float) (Assets.VIRTUAL_HEIGHT * 0.9) - 20);
+		btnReturn.setPosition(20, (float) (Assets.VIRTUAL_HEIGHT * 0.92) - 20);
 		stage.addActor(btnReturn);
 		btnReturn.addListener(new ClickListener() {
 
@@ -61,8 +68,17 @@ public class SwichScreen implements Screen {
 		});
 
 		tab = new Table(assets.skin);
+		tab.setWidth(380);
+		tab.setHeight(600);
 		tab.setPosition((float) (Assets.VIRTUAL_WIDTH - tab.getWidth()) / 2,
-				(float) (Assets.VIRTUAL_HEIGHT * 0.65 - tab.getHeight()));
+				(float) (Assets.VIRTUAL_HEIGHT - tab.getHeight()) / 2);
+
+		Pixmap pm = new Pixmap(380, 600, Format.RGBA8888);
+		pm.setColor(0.28f, 0.63f, 0.97f, 0.4f);
+		pm.fill();
+		TextureRegion bg = new TextureRegion(new Texture(pm));
+		tab.setBackground(new TextureRegionDrawable(bg));
+
 		stage.addActor(tab);
 	}
 
@@ -177,9 +193,9 @@ public class SwichScreen implements Screen {
 		for (int i = 0; i < gameCnt; i++) {
 			ImageButton tBtn;
 
-			if (0 == i % 3) {
-				tab.row();
-			}
+//			if (0 == (i + 1) % 4) {
+//				tab.row();
+//			}
 
 			// add star
 			if (i > passCnt) {
@@ -187,8 +203,7 @@ public class SwichScreen implements Screen {
 			} else {
 				tBtn = new ImageButton(assets.skin, Assets.BtnStar);
 			}
-			tBtn.sizeBy(72, 72);
-			tab.add(tBtn).pad(20);
+			tab.add(tBtn).width(120).pad(10);
 
 			if (i > passCnt) {
 				continue;
@@ -217,6 +232,7 @@ public class SwichScreen implements Screen {
 					gameMain.setScreen(gameMain.gameScreen);
 				}
 			});
+
 			groups.add(tBtn);
 		}
 	}
