@@ -13,6 +13,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -54,7 +57,7 @@ public class MainMenuScreen implements Screen {
 		stage.addActor(bg);
 
 		font = new FreetypeFontWrap();
-		labelStyle = new LabelStyle(font.getFont("开始确认取消"), Color.BLACK);
+		labelStyle = new LabelStyle(font.getFont("开始退出"), Color.BLACK);
 
 		Label lab = new Label("开始", labelStyle);
 		btnStart = new Button(assets.skin, Assets.Btn);
@@ -116,7 +119,7 @@ public class MainMenuScreen implements Screen {
 			} else if (event.getListenerActor() == btnOk) {
 				Gdx.app.exit();
 			} else if (event.getListenerActor() == btnCancel) {
-				window.remove();
+				closePopup();
 			}
 		}
 
@@ -126,43 +129,16 @@ public class MainMenuScreen implements Screen {
 
 		@Override
 		public boolean keyDown(int keycode) {
+
 			if (keycode == Keys.BACK || keycode == Keys.BACKSPACE
 					|| Keys.ESCAPE == keycode) {
-				Assets assets = Assets.getInstance();
-				WindowStyle style = new WindowStyle(assets.getFont(),
-						Color.BLACK, null);
-				style.titleFont = font.getFont("确认退出？");
-				window = new Window("确认退出么？", style);
-
-				window.setWidth(400);
-				window.setHeight(200);
-				window.setPosition(40, 200);
-				window.setModal(true);
-				window.defaults().padTop(50);
-
-				Pixmap pm = new Pixmap(380, 600, Format.RGBA8888);
-				pm.setColor(0.28f, 0.63f, 0.97f, 1f);
-				pm.fill();
-				TextureRegion bg = new TextureRegion(new Texture(pm));
-				window.setBackground(new TextureRegionDrawable(bg));
-
-				btnOk = new Button(assets.skin, Assets.Btn);
-				Label lab = new Label("确认", labelStyle);
-				btnOk.add(lab);
-				btnOk.addListener(clicListener);
-				btnOk.setPosition(80, 70);
-				window.addActor(btnOk);
-
-				btnCancel = new Button(assets.skin, Assets.Btn);
-				Label lab2 = new Label("取消", labelStyle);
-				btnCancel.add(lab2);
-				btnCancel.setPosition(80, 20);
-				btnCancel.addListener(clicListener);
-				window.addActor(btnCancel);
-
-				stage.addActor(window);
+				if (window != null && window.isVisible()) {
+					closePopup();
+				} else {
+					showPopup();
+				}
 			}
-			return false;
+			return true;
 		}
 
 		@Override
@@ -206,6 +182,44 @@ public class MainMenuScreen implements Screen {
 		public boolean scrolled(int amount) {
 			// TODO Auto-generated method stub
 			return false;
+		}
+	}
+
+	private void showPopup() {
+		Assets assets = Assets.getInstance();
+		WindowStyle style = new WindowStyle(assets.getFont(), Color.BLACK, null);
+
+		window = new Window("确认退出么？", style);
+		window.setWidth(400);
+		window.setHeight(200);
+		window.setPosition(40, 200);
+		window.setModal(true);
+		window.defaults().padTop(50);
+
+		Pixmap pm = new Pixmap(380, 600, Format.RGBA8888);
+		pm.setColor(0.28f, 0.63f, 0.97f, 1f);
+		pm.fill();
+		TextureRegion bg = new TextureRegion(new Texture(pm));
+		window.setBackground(new TextureRegionDrawable(bg));
+
+		btnOk = new Button(assets.skin, Assets.Btn);
+		Label lab = new Label("退出", labelStyle);
+		btnOk.add(lab);
+		btnOk.addListener(clicListener);
+		btnOk.setPosition(80, 70);
+		window.addActor(btnOk);
+
+		stage.addActor(window);
+	}
+
+	private void closePopup() {
+		if (null == window) {
+			return;
+		}
+
+		if (window.isVisible()) {
+			window.remove();
+			window = null;
 		}
 	}
 }
