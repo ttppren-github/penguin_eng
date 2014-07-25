@@ -1,5 +1,7 @@
 package com.fy.penguineng.world.modules;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Music.OnCompletionListener;
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.TtsCtrl;
 import com.fy.penguineng.icontrol.ITtsCtrl;
@@ -7,8 +9,9 @@ import com.fy.penguineng.world.WordPool;
 
 public class WordCloud extends ActiveObject {
 	public static final int BOB_STATE_IDLE = -1;
-	public static final int BOB_STATE_FLYING = 0;
+	public static final int BOB_STATE_RISING = 0;
 	public static final int BOB_STATE_HIT = 1;
+	public static final int BOB_STATE_SPEAKING = 2;
 
 	private static final float BOB_MOVE_VELOCITY = 100;
 	private static final float FLY_OUT_VELOCITY = 400;
@@ -38,7 +41,7 @@ public class WordCloud extends ActiveObject {
 	}
 
 	public void update(float deltaTime) {
-		if (state == BOB_STATE_FLYING) {
+		if (state == BOB_STATE_RISING) {
 			// velocity.add(WorldControl.gravity.x * deltaTime,
 			// WorldControl.gravity.y * deltaTime);
 			position.add(velocity.x * deltaTime, velocity.y * deltaTime);
@@ -65,7 +68,7 @@ public class WordCloud extends ActiveObject {
 
 	public void reset() {
 		this.word = pool.mining();
-		state = BOB_STATE_FLYING;
+		state = BOB_STATE_RISING;
 
 		this.position.x = this.startX - word.length() / 2 * 10;
 		this.position.y = this.startY;
@@ -74,6 +77,9 @@ public class WordCloud extends ActiveObject {
 		this.bounds.width = Assets.LETTER_WIDTH * word.length() + BOB_WIDTH * 2;
 
 		speaker.unload();
+		String path = "sounds/" + pool.getStage() + "/" + word.replace(" ", "")
+				+ ".ogg";
+		speaker.load(path);
 	}
 
 	public void FlyOut() {
@@ -93,9 +99,17 @@ public class WordCloud extends ActiveObject {
 	}
 
 	public void speak() {
-		String path = "sounds/" + pool.getStage() + "/" + word.replace(" ", "")
-				+ ".ogg";
-		speaker.load(path);
+		state = BOB_STATE_SPEAKING;
+		speaker.setOnCompletionListener(listener);
 		speaker.speakOut();
 	}
+
+	private OnCompletionListener listener = new OnCompletionListener() {
+
+		@Override
+		public void onCompletion(Music music) {
+			state = BOB_STATE_IDLE;
+		}
+
+	};
 }

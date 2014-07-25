@@ -34,6 +34,7 @@ import com.fy.penguineng.world.WordPool;
  * 
  */
 public class SwichScreen implements Screen {
+	private final String TAG = "SwichScreen";
 	private BaseStage stage;
 	private PenguinEng gameMain;
 	private Image bg;
@@ -72,7 +73,7 @@ public class SwichScreen implements Screen {
 		tab.setPosition((float) (Assets.VIRTUAL_WIDTH - tab.getWidth()) / 2,
 				(float) (Assets.VIRTUAL_HEIGHT - tab.getHeight()) / 2);
 		tab.align(BaseTableLayout.TOP | BaseTableLayout.LEFT);
-		
+
 		Pixmap pm = new Pixmap(380, 600, Format.RGBA8888);
 		pm.setColor(0.28f, 0.63f, 0.97f, 0.4f);
 		pm.fill();
@@ -184,16 +185,18 @@ public class SwichScreen implements Screen {
 		IScoreManager sm = ScoreManager.getInstance();
 		Assets assets = Assets.getInstance();
 
-		int gameCnt = sm.getStageCount();
+		int gameCnt = 12;// sm.getStageCount();
 		int passCnt = sm.getPassCount();
 		labs = new Label[gameCnt];
 
+		// must be clear befor add some
 		tab.clearChildren();
+		groups.clear();
 
 		for (int i = 0; i < gameCnt; i++) {
 			ImageButton tBtn;
 
-			if (0 == (i + 1) % 4) {
+			if (0 == i % 3) {
 				tab.row();
 			}
 
@@ -221,6 +224,7 @@ public class SwichScreen implements Screen {
 
 					WordPool pool = WordPool.getInstance();
 					String str = String.format("dic/%dstage_dic.json", i);
+//					Gdx.app.log(TAG, str);
 					pool.loadJson(str);
 
 					if (gameMain.recognizerCtrl != null) {

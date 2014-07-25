@@ -96,7 +96,6 @@ public class WordPool {
 	}
 
 	public boolean checkOver() {
-
 		return words.size == 0;
 	}
 

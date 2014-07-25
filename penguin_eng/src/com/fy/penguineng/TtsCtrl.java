@@ -2,6 +2,7 @@ package com.fy.penguineng;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Music.OnCompletionListener;
 import com.fy.penguineng.icontrol.ITtsCtrl;
 
 public class TtsCtrl implements ITtsCtrl {
@@ -45,6 +46,13 @@ public class TtsCtrl implements ITtsCtrl {
 		}
 
 		return false;
+	}
+
+	@Override
+	public void setOnCompletionListener(OnCompletionListener listener) {
+		if (null != music) {
+			music.setOnCompletionListener(listener);
+		}
 	}
 
 }

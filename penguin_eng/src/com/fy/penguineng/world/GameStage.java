@@ -118,7 +118,7 @@ public class GameStage extends BaseStage {
 				bob.state = WordCloud.BOB_STATE_IDLE;
 				gamePass();
 			}
-		} else if (WordCloud.BOB_STATE_IDLE == bob.state && !bob.isSpeaking()) {
+		} else if (WordCloud.BOB_STATE_IDLE == bob.state) {
 			bob.reset();
 			wordFromMic = "";
 			iceberg.start();
@@ -127,13 +127,13 @@ public class GameStage extends BaseStage {
 			}
 		}
 
-		if (WordCloud.BOB_STATE_FLYING == bob.state) {
+		if (WordCloud.BOB_STATE_RISING == bob.state) {
 			// Check word
 			if (bob.getWord().matches(wordFromMic)) {
 				bob.hit();
 				correctCnt++;
 				iceberg.stop();
-		
+
 				if (correctCnt > 0) {
 					goodS[correctCnt / 4].speakOut();
 				}
@@ -161,10 +161,9 @@ public class GameStage extends BaseStage {
 		}
 
 		if (bob.state == WordCloud.BOB_STATE_HIT
-				|| WordCloud.BOB_STATE_FLYING == bob.state) {
+				|| WordCloud.BOB_STATE_RISING == bob.state) {
 			bob.update(deltaTime);
 		}
-
 
 	}
 
