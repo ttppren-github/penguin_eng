@@ -136,7 +136,14 @@ public class GameStage extends BaseStage {
 				iceberg.stop();
 
 				if (correctCnt > 0) {
+					// First should turn off recognizer, then speak.
+					if (null != recognizerCtrl) {
+						recognizerCtrl.stopRecognizer();
+					}
 					goodS[correctCnt / 4].speakOut();
+					if (null != recognizerCtrl) {
+						recognizerCtrl.startRecognizer();
+					}
 				}
 			} else if (bob.position.y > Assets.VIRTUAL_HEIGHT * BOB_OVER) {
 				// word miss, first speak out, then renew word
