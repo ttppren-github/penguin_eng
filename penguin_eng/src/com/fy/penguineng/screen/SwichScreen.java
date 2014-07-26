@@ -34,7 +34,7 @@ import com.fy.penguineng.world.WordPool;
  * 
  */
 public class SwichScreen implements Screen {
-	private final String TAG = "SwichScreen";
+	// private final String TAG = "SwichScreen";
 	private BaseStage stage;
 	private PenguinEng gameMain;
 	private Image bg;
@@ -224,7 +224,7 @@ public class SwichScreen implements Screen {
 
 					WordPool pool = WordPool.getInstance();
 					String str = String.format("dic/%dstage_dic.json", i);
-//					Gdx.app.log(TAG, str);
+					// Gdx.app.log(TAG, str);
 					pool.loadJson(str);
 
 					if (gameMain.recognizerCtrl != null) {
