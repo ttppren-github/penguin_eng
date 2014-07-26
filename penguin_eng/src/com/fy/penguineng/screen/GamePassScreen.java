@@ -9,9 +9,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.BaseStage;
@@ -27,40 +29,52 @@ import com.fy.penguineng.world.WordPool;
  */
 public class GamePassScreen implements Screen {
 	private final String RETRY = "再来一次";
+	private final String NEXT = "下一关";
 	private final String RETURN = "主菜单";
 	private final String C1 = "恭喜您：\n        在本关中成功阻止雪山融化，并获得\"%s\"称号。";
 	private final String[] C2 = { "环保卫士", "环保斗士", "环保勇士" };
 
-	private PenguinEng game;
+	private PenguinEng gameMain;
 
 	private BaseStage stage;
-	private Button btnRetry;
-	private Button btnBack;
+	private Button btnRetry, btnBack, btnNext;
 	private TextArea c1;
 
 	/**
 	 * 
 	 */
 	public GamePassScreen(PenguinEng game) {
-		this.game = game;
+		this.gameMain = game;
 		stage = new BaseStage();
 
 		FreetypeFontWrap font = new FreetypeFontWrap();
-		LabelStyle labelStyle = new LabelStyle(font.getFont(RETURN + RETRY),
-				Color.BLACK);
+		LabelStyle labelStyle = new LabelStyle(font.getFont(RETURN + RETRY
+				+ NEXT), Color.BLACK);
 
 		btnRetry = new Button(Assets.getInstance().skin, Assets.Btn);
 		btnRetry.add(new Label(RETRY, labelStyle));
-		btnRetry.setPosition(120, 240);
 		btnRetry.addListener(clickListener);
 
 		btnBack = new Button(Assets.getInstance().skin, Assets.Btn);
 		btnBack.add(new Label(RETURN, labelStyle));
-		btnBack.setPosition(120, 160);
 		btnBack.addListener(clickListener);
 
-		stage.addActor(btnRetry);
-		stage.addActor(btnBack);
+		btnNext = new Button(Assets.getInstance().skin, Assets.Btn);
+		btnNext.add(new Label(NEXT, labelStyle));
+		btnNext.addListener(clickListener);
+
+		final Table tableRoot = new Table();
+		tableRoot.setFillParent(true);
+		tableRoot.add(btnRetry);
+		tableRoot.row();
+		tableRoot.row().spaceTop(20);
+		tableRoot.add(btnNext);
+		tableRoot.row();
+		tableRoot.row().spaceTop(20);
+		tableRoot.add(btnBack);
+		tableRoot.defaults().align(Align.center);
+		tableRoot.padTop(50);
+		stage.addActor(tableRoot);
 
 		// Check score
 		int key = Integer.valueOf(WordPool.getInstance().getStage());
@@ -120,9 +134,23 @@ public class GamePassScreen implements Screen {
 		public void clicked(InputEvent event, float x, float y) {
 			if (event.getListenerActor() == btnRetry) {
 				WordPool.getInstance().reload();
-				game.setScreen(game.gameScreen);
+				gameMain.setScreen(gameMain.gameScreen);
 			} else if (event.getListenerActor() == btnBack) {
-				game.setScreen(game.mainScreen);
+				gameMain.setScreen(gameMain.mainScreen);
+			} else if (event.getListenerActor() == btnNext) {
+				WordPool pool = WordPool.getInstance();
+				String s = pool.getStage();
+				int i = Integer.valueOf(s) + 1;
+
+				String str = String.format("dic/%dstage_dic.json", i);
+				pool.loadJson(str);
+
+				if (gameMain.recognizerCtrl != null) {
+					String gram = String.format(
+							"models/grammar/words/%dstage.gram", i);
+					gameMain.recognizerCtrl.loadGrammar(gram);
+				}
+				gameMain.setScreen(gameMain.gameScreen);
 			}
 		}
 

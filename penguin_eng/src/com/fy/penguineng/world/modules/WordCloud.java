@@ -95,7 +95,8 @@ public class WordCloud extends ActiveObject {
 	}
 
 	public boolean isSpeaking() {
-		return speaker.isSpeaking();
+		// return speaker.isSpeaking();
+		return BOB_STATE_SPEAKING == state;
 	}
 
 	public void speak() {

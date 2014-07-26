@@ -101,7 +101,7 @@ public class GameFailScreen implements Screen {
 			String text = WordPool.getInstance().getText(selectedWord);
 			tx.clear();
 
-			style.font = font.getFont(replayHZ(text), 24);
+			style.font = font.getFont(text, 24);
 			style.fontColor = Color.BLACK;
 			tx.setStyle(style);
 			tx.setText(text);
@@ -164,31 +164,4 @@ public class GameFailScreen implements Screen {
 			}
 		}
 	};
-
-	private String replayHZ(final String text) {
-		String ret = "";
-		StringBuffer strBuf = new StringBuffer();
-		char c;
-		int j;
-
-		if (text == null) {
-			return ret;
-		}
-
-		for (int i = 0; i < text.length(); i++) {
-			c = text.charAt(i);
-			for (j = 0; j < strBuf.length(); j++) {
-				if (c == strBuf.charAt(j)) {
-					break;
-				}
-			}
-
-			if (j == strBuf.length()) {
-				strBuf.append(c);
-			}
-		}
-
-		ret = strBuf.toString();
-		return ret;
-	}
 }

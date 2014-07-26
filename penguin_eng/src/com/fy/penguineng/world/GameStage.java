@@ -77,6 +77,7 @@ public class GameStage extends BaseStage {
 		temperature = 0;
 		iceberg.reset();
 		outValue = 0;
+		correctCnt = 0;
 	}
 
 	@Override
