@@ -32,10 +32,9 @@ public class GameFailScreen implements Screen {
 	private final String TAG = GameFailScreen.class.getSimpleName();
 	private final String RETURN = "选择关卡";
 	private final String RESTART = "重玩";
-	private final String VOICE = "发音";
 	private PenguinEng gameMain;
 	private BaseStage stage;
-	private Button btnBack, btnRestart, btnVoice;
+	private Button btnBack, btnRestart;
 	private List list;
 	private TextArea tx;
 	private String selectedWord;
@@ -51,8 +50,8 @@ public class GameFailScreen implements Screen {
 		stage = new BaseStage();
 
 		FreetypeFontWrap font = new FreetypeFontWrap();
-		LabelStyle labelStyle = new LabelStyle(font.getFont(RETURN + RESTART
-				+ VOICE), Color.BLACK);
+		LabelStyle labelStyle = new LabelStyle(font.getFont(RETURN + RESTART),
+				Color.BLACK);
 
 		btnBack = new Button(Assets.getInstance().skin, Assets.Btn);
 		btnBack.add(new Label(RETURN, labelStyle));
@@ -62,12 +61,9 @@ public class GameFailScreen implements Screen {
 		btnRestart.add(new Label(RESTART, labelStyle));
 		btnRestart.addListener(clickListener);
 
-		btnVoice = new Button(Assets.getInstance().skin, Assets.Btn);
-		btnVoice.add(new Label(VOICE, labelStyle));
-		btnVoice.addListener(clickListener);
-
 		list = new List(Assets.getInstance().skin, Assets.ListView);
 		final ScrollPane scroller = new ScrollPane(list);
+		list.addListener(clickListener);
 
 		TextFieldStyle tfStyle = new TextFieldStyle();
 		tfStyle.font = Assets.getInstance().getFont();
@@ -80,8 +76,6 @@ public class GameFailScreen implements Screen {
 		tableRoot.row().spaceTop(20);
 		tableRoot.add(scroller);
 		tableRoot.row().spaceTop(20);
-		tableRoot.add(btnVoice);
-		tableRoot.row();
 		tableRoot.add(btnBack);
 		tableRoot.row();
 		tableRoot.add(btnRestart);
@@ -159,7 +153,7 @@ public class GameFailScreen implements Screen {
 			} else if (event.getListenerActor() == btnRestart) {
 				WordPool.getInstance().reload();
 				gameMain.setScreen(gameMain.gameScreen);
-			} else if (event.getListenerActor() == btnVoice) {
+			} else if (event.getListenerActor() == list) {
 				if (speaker != null) {
 					String path = "sounds/" + WordPool.getInstance().getStage()
 							+ "/" + selectedWord.replace(" ", "") + ".ogg";
