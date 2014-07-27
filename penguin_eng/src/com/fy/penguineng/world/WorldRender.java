@@ -14,7 +14,7 @@ public class WorldRender {
 	private final String TT = "废气量";
 	private final String HH = "雪山高度";
 	private final String STAGE = "第关";
-	private final int FontSize = 18;
+	private final int FontSize = 24;
 
 	private float frustum_width;
 	private float frustum_height;
@@ -41,11 +41,11 @@ public class WorldRender {
 		tfStyle.font = ft.getFont(TT + HH + STAGE + "0123456789", FontSize);
 		tfStyle.fontColor = Color.BLACK;
 		outGas = new Label(TT + "0", tfStyle);
-		outGas.setBounds(20, 730, 100, 60);
+		outGas.setBounds(20, 700, 100, 60);
 		world.addActor(outGas);
 
 		icebergHeight = new Label("8848", tfStyle);
-		icebergHeight.setBounds(20, 700, 100, 60);
+		icebergHeight.setBounds(20, 660, 100, 60);
 		world.addActor(icebergHeight);
 
 		stageNo = new Label("", tfStyle);
