@@ -3,6 +3,7 @@
  */
 package com.fy.penguineng.world;
 
+import com.badlogic.gdx.Gdx;
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.ScoreManager;
@@ -93,6 +94,9 @@ public class GameStage extends BaseStage {
 		updateIceberg(deltaTime);
 		micPower.update(deltaTime, volume);
 
+		if (Gdx.input.justTouched()) {
+			bob.miss();
+		}
 		super.act(deltaTime);
 	}
 
@@ -144,18 +148,22 @@ public class GameStage extends BaseStage {
 					}
 				}
 			} else if (bob.position.y > Assets.VIRTUAL_HEIGHT * BOB_OVER) {
-				// word miss, first speak out, then renew word
-				if (null != recognizerCtrl) {
-					recognizerCtrl.stopRecognizer();
-				}
-
-				bob.FlyOut();
-				bob.speak();
-
-				correctCnt = 0;
-				outValue += bob.getWord().replace(" ", "").length();
-				iceberg.stop();
+				bob.miss();
 			}
+		}
+
+		if (WordCloud.BOB_STATE_MISSING == bob.state) {
+			// word miss, first speak out, then renew word
+			if (null != recognizerCtrl) {
+				recognizerCtrl.stopRecognizer();
+			}
+
+			bob.FlyOut();
+			bob.speak();
+
+			correctCnt = 0;
+			outValue += bob.getWord().replace(" ", "").length();
+			iceberg.stop();
 		}
 
 		// Check if word disappear after read right

@@ -12,6 +12,7 @@ public class WordCloud extends ActiveObject {
 	public static final int BOB_STATE_RISING = 0;
 	public static final int BOB_STATE_HIT = 1;
 	public static final int BOB_STATE_SPEAKING = 2;
+	public static final int BOB_STATE_MISSING = 3;
 
 	private static final float BOB_MOVE_VELOCITY = 100;
 	private static final float FLY_OUT_VELOCITY = 400;
@@ -24,6 +25,7 @@ public class WordCloud extends ActiveObject {
 	private ITtsCtrl speaker;
 	private String word;
 	private float startX, startY;
+	
 
 	public WordCloud(float x, float y) {
 		super(x, y, BOB_WIDTH, BOB_HEIGHT);
@@ -84,6 +86,10 @@ public class WordCloud extends ActiveObject {
 
 	public void FlyOut() {
 		state = BOB_STATE_IDLE;
+	}
+	
+	public void miss() {
+		state = BOB_STATE_MISSING;
 	}
 
 	public int getState() {
