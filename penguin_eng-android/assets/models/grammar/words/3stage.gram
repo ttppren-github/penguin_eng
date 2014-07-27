@@ -12,6 +12,7 @@ grammar digits;
 			hair               |
 			jazz                |
 			kiss                   |
+			delay				|
 			layer              |
 			natural                |
 			office               |
