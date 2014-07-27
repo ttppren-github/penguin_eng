@@ -23,7 +23,7 @@ public class Iceberg extends ActiveObject {
 		heightSetp = HEIGHT / BOB_HEIGHT;
 	}
 
-	public void update(float deltaTime, int temperature) {
+	public void update(float deltaTime, float temperature) {
 		float tmp = (float) Math.sqrt(temperature);
 		float dis = tmp * deltaTime * ve;
 		this.bounds.height -= dis;

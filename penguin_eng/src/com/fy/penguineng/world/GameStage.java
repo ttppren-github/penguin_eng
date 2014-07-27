@@ -29,7 +29,6 @@ public class GameStage extends BaseStage {
 	protected final Iceberg iceberg;
 	protected final MicPower micPower;
 	private WorldRender render;
-	private int temperature = 0;
 	private IPlayStateListener playStateListener;
 	private int volume;
 	private IGameControl recognizerCtrl;
@@ -74,7 +73,6 @@ public class GameStage extends BaseStage {
 
 	public void reset() {
 		bob.reset();
-		temperature = 0;
 		iceberg.reset();
 		outValue = 0;
 		correctCnt = 0;
@@ -153,7 +151,6 @@ public class GameStage extends BaseStage {
 
 				bob.FlyOut();
 				bob.speak();
-				temperature += 1;
 
 				correctCnt = 0;
 				outValue += bob.getWord().replace(" ", "").length();
@@ -177,7 +174,7 @@ public class GameStage extends BaseStage {
 
 	private void updateIceberg(float deltaTime) {
 		if (iceberg.bounds.height > 0) {
-			iceberg.update(deltaTime, temperature);
+			iceberg.update(deltaTime, outValue);
 		} else {
 			gameFaill();
 		}
@@ -196,7 +193,7 @@ public class GameStage extends BaseStage {
 			throw new NullPointerException();
 		}
 
-		int socres = iceberg.mHeight - temperature * outValue;
+		int socres = iceberg.mHeight - outValue;
 		scoreMgr.setScores(Integer.valueOf(WordPool.getInstance().getStage()),
 				socres);
 
