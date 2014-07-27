@@ -15,9 +15,11 @@ public class WordPool {
 	private Array<String> words;
 	private JsonValue val;
 	private String fileName;
+	private int oldRet;
 
 	private WordPool() {
 		words = new Array<String>();
+		oldRet = 0;
 	}
 
 	public static WordPool getInstance() {
@@ -105,9 +107,13 @@ public class WordPool {
 
 	private int random() {
 		int ret = 0;
-		if (words.size > 0) {
-			ret = MathUtils.random(0, words.size - 1);
+		if (words.size > 1) {
+			while (oldRet == ret) {
+				ret = MathUtils.random(0, words.size - 1);
+			}
 		}
+
+		oldRet = ret;
 		return ret;
 	}
 
