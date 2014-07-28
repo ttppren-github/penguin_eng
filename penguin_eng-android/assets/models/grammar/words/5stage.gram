@@ -18,7 +18,6 @@ grammar digits;
 			officer                |
 			passion                   |
 			really funny	|
-			good night	|
 			see you					 ;
 
           
