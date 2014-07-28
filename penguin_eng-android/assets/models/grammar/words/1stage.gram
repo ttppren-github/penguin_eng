@@ -13,7 +13,6 @@ grammar digits;
 			blue                |
 			color                   |
 			happy              |
-			sleep               |
 			fast                |
 			believe                   |
 			good night	|

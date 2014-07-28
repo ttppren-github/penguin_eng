@@ -4,6 +4,7 @@ grammar digits;
 
 <digit> =	baby               |
 			bacteria                |
+			balance 			|
 			camera               |
 			dear                |
 			easy                |
