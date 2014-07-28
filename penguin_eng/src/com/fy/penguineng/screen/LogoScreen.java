@@ -54,9 +54,8 @@ public class LogoScreen implements Screen {
 		start += delta;
 		if (game.assets.update()) {
 			float ret = game.assets.getProgress();
-			if (ret == 1 && /* game.ttsListener != null && */start > DELAY) {
+			if (ret == 1 && game.recognizerCtrl != null && start > DELAY) {
 				Gdx.app.log(TAG, "loading resource over.");
-
 				game.resourceReady();
 			}
 		}

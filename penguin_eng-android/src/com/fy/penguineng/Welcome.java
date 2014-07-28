@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,9 +51,9 @@ public class Welcome extends Activity {
 
 			@Override
 			public void onClick(View v) {
-//				Intent intent = new Intent();
-//				intent.setClass(ctx, MainActivity.class);
-//				startActivity(intent);
+				// Intent intent = new Intent();
+				// intent.setClass(ctx, MainActivity.class);
+				// startActivity(intent);
 				finish();
 			}
 
@@ -184,4 +185,12 @@ public class Welcome extends Activity {
 		}
 
 	};
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			return true;
+		}
+		return super.onKeyUp(keyCode, event);
+	}
 }
