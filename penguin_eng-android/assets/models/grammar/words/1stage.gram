@@ -5,7 +5,6 @@ grammar digits;
 <digit> =	welcome                |
 			good               |
 			thanks                |
-			boy                |
 			girl                 |
 			football              |
 			morning               |
