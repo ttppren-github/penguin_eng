@@ -157,6 +157,7 @@ public class GameStage extends BaseStage {
 			if (null != recognizerCtrl) {
 				recognizerCtrl.stopRecognizer();
 			}
+			wordFromMic = "";
 
 			bob.FlyOut();
 			bob.speak();
