@@ -86,7 +86,7 @@ public class ScoreManager implements IScoreManager {
 	private void loadJson(String fileName) {
 		FileHandle f = Gdx.files.local(NAME);
 		if (!f.exists()) {
-			for (int i = 0; i < 5; i++) {
+			for (int i = 1; i < 6; i++) {
 				scores.setScore(i, 0);
 			}
 

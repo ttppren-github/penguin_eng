@@ -6,15 +6,23 @@ package com.fy.penguineng.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.FreetypeFontWrap;
@@ -83,7 +91,7 @@ public class GamePassScreen implements Screen {
 
 		String text = String.format(C1, C2[s]);
 		TextFieldStyle lStyle = new TextFieldStyle();
-		lStyle.font = font.getFont(replayHZ(text), 24);
+		lStyle.font = font.getFont(text, 24);
 		lStyle.fontColor = Color.BLACK;
 		c1 = new TextArea(text, lStyle);
 		c1.setBounds(40, 540, 400, 120);
@@ -142,6 +150,11 @@ public class GamePassScreen implements Screen {
 				String s = pool.getStage();
 				int i = Integer.valueOf(s) + 1;
 
+				if (i >= SwichScreen.passCnt) {
+					showPopup();
+					return;
+				}
+
 				String str = String.format("dic/%dstage_dic.json", i);
 				pool.loadJson(str);
 
@@ -155,31 +168,55 @@ public class GamePassScreen implements Screen {
 		}
 
 	};
+	private Button btnOk;
+	private Window window;
 
-	private String replayHZ(final String text) {
-		String ret = "";
-		StringBuffer strBuf = new StringBuffer();
-		char c;
-		int j;
+	private void showPopup() {
+		Assets assets = Assets.getInstance();
+		FreetypeFontWrap font = new FreetypeFontWrap();
+		BitmapFont bFont = font.getFont("知道了正在建设中，敬请期待。");
+		LabelStyle labelStyle = new LabelStyle(bFont, Color.BLACK);
 
-		if (text == null) {
-			return ret;
-		}
+		WindowStyle style = new WindowStyle(bFont, Color.BLACK, null);
 
-		for (int i = 0; i < text.length(); i++) {
-			c = text.charAt(i);
-			for (j = 0; j < strBuf.length(); j++) {
-				if (c == strBuf.charAt(j)) {
-					break;
+		window = new Window("正在建设中，敬请期待。", style);
+		window.setWidth(400);
+		window.setHeight(200);
+		window.setPosition(40, 200);
+		window.setModal(true);
+		window.defaults().padTop(50);
+
+		Pixmap pm = new Pixmap(380, 600, Format.RGBA8888);
+		pm.setColor(0.28f, 0.63f, 0.97f, 1f);
+		pm.fill();
+		TextureRegion bg = new TextureRegion(new Texture(pm));
+		window.setBackground(new TextureRegionDrawable(bg));
+
+		btnOk = new Button(assets.skin, Assets.Btn);
+		Label lab = new Label("知道了", labelStyle);
+		btnOk.add(lab);
+		btnOk.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				if (event.getListenerActor() == btnOk) {
+					closePopup();
 				}
 			}
+		});
+		btnOk.setPosition(80, 70);
+		window.addActor(btnOk);
 
-			if (j == strBuf.length()) {
-				strBuf.append(c);
-			}
+		stage.addActor(window);
+	}
+
+	private void closePopup() {
+		if (null == window) {
+			return;
 		}
 
-		ret = strBuf.toString();
-		return ret;
+		if (window.isVisible()) {
+			window.remove();
+			window = null;
+		}
 	}
 }

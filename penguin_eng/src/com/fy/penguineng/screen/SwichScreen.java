@@ -10,20 +10,27 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.esotericsoftware.tablelayout.BaseTableLayout;
 import com.fy.penguineng.Assets;
 import com.fy.penguineng.BaseStage;
+import com.fy.penguineng.FreetypeFontWrap;
 import com.fy.penguineng.PenguinEng;
 import com.fy.penguineng.ScoreManager;
 import com.fy.penguineng.icontrol.IScoreManager;
@@ -34,6 +41,7 @@ import com.fy.penguineng.world.WordPool;
  * 
  */
 public class SwichScreen implements Screen {
+	public static int passCnt;
 	// private final String TAG = "SwichScreen";
 	private BaseStage stage;
 	private PenguinEng gameMain;
@@ -42,6 +50,8 @@ public class SwichScreen implements Screen {
 	private ArrayList<ImageButton> groups;
 	private Label[] labs;
 	private Table tab;
+	private Window window;
+	private Button btnOk;
 
 	/**
 	 * 
@@ -186,7 +196,7 @@ public class SwichScreen implements Screen {
 		Assets assets = Assets.getInstance();
 
 		int gameCnt = 12;// sm.getStageCount();
-		int passCnt = sm.getPassCount();
+		passCnt = sm.getPassCount();
 		labs = new Label[gameCnt];
 
 		// must be clear befor add some
@@ -222,6 +232,11 @@ public class SwichScreen implements Screen {
 				public void clicked(InputEvent event, float x, float y) {
 					int i = groups.indexOf(event.getListenerActor()) + 1;
 
+					if (i > passCnt) {
+						showPopup();
+						return;
+					}
+
 					WordPool pool = WordPool.getInstance();
 					String str = String.format("dic/%dstage_dic.json", i);
 					// Gdx.app.log(TAG, str);
@@ -238,6 +253,55 @@ public class SwichScreen implements Screen {
 			});
 
 			groups.add(tBtn);
+		}
+	}
+
+	private void showPopup() {
+		Assets assets = Assets.getInstance();
+		FreetypeFontWrap font = new FreetypeFontWrap();
+		BitmapFont bFont = font.getFont("知道了正在建设中，敬请期待。");
+		LabelStyle labelStyle = new LabelStyle(bFont, Color.BLACK);
+
+		WindowStyle style = new WindowStyle(bFont, Color.BLACK, null);
+
+		window = new Window("正在建设中，敬请期待。", style);
+		window.setWidth(400);
+		window.setHeight(200);
+		window.setPosition(40, 200);
+		window.setModal(true);
+		window.defaults().padTop(50);
+
+		Pixmap pm = new Pixmap(380, 600, Format.RGBA8888);
+		pm.setColor(0.28f, 0.63f, 0.97f, 1f);
+		pm.fill();
+		TextureRegion bg = new TextureRegion(new Texture(pm));
+		window.setBackground(new TextureRegionDrawable(bg));
+
+		btnOk = new Button(assets.skin, Assets.Btn);
+		Label lab = new Label("知道了", labelStyle);
+		btnOk.add(lab);
+		btnOk.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				if (event.getListenerActor() == btnOk) {
+					closePopup();
+				}
+			}
+		});
+		btnOk.setPosition(80, 70);
+		window.addActor(btnOk);
+
+		stage.addActor(window);
+	}
+
+	private void closePopup() {
+		if (null == window) {
+			return;
+		}
+
+		if (window.isVisible()) {
+			window.remove();
+			window = null;
 		}
 	}
 }
