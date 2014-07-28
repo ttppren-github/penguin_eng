@@ -49,8 +49,6 @@ public class WorldRender {
 		world.addActor(icebergHeight);
 
 		stageNo = new Label("", tfStyle);
-		stageNo.setBounds((frustum_width - (HH.length() + 2) * FontSize) / 2,
-				730, 100, 60);
 		world.addActor(stageNo);
 	}
 
@@ -69,6 +67,8 @@ public class WorldRender {
 
 	public void renderObjects(Batch batch) {
 		String s = String.format("第%s关", WordPool.getInstance().getStage());
+		stageNo.setBounds((frustum_width - s.length() * FontSize) / 2, 730,
+				100, 60);
 		stageNo.setText(s);
 
 		micPowerView.setVolume(world.micPower.volume);
