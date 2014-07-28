@@ -2,21 +2,21 @@
 
 grammar digits;
 
-<digit> =	address               |
+<digit> =	address             |
 			baby                |
-			call               |
-			decide                |
-			defeat                |
-			delete              |
-			fail                 |
-			hair               |
-			jazz                |
-			kiss                   |
+			call               	|
+			decide              |
+			defeat              |
+			definitely			|
 			delay				|
-			layer              |
-			natural                |
-			office               |
-			go to cinema	|
+			fail                |
+			hair              	|
+			jazz                |
+			kiss                |
+			layer              	|
+			natural             |
+			office              |
+			go to cinema		|
 			genius              |
 			enjoy your life					 ;
 
