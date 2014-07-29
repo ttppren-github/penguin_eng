@@ -52,6 +52,7 @@ public class SwichScreen implements Screen {
 	private Table tab;
 	private Window window;
 	private Button btnOk;
+	private int gameCnt;
 
 	/**
 	 * 
@@ -195,7 +196,7 @@ public class SwichScreen implements Screen {
 		IScoreManager sm = ScoreManager.getInstance();
 		Assets assets = Assets.getInstance();
 
-//		int gameCnt = 12;// sm.getStageCount();
+		gameCnt = sm.getStageCount();
 		passCnt = sm.getPassCount();
 
 		// must be clear befor add some
@@ -230,7 +231,7 @@ public class SwichScreen implements Screen {
 			}
 			tab.add(tBtn).width(110).pad(10);
 
-			if (i > passCnt) {
+			if (i > gameCnt) {
 				continue;
 			}
 
@@ -238,21 +239,21 @@ public class SwichScreen implements Screen {
 
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					int i = groups.indexOf(event.getListenerActor()) + 1;
+					int nStage = groups.indexOf(event.getListenerActor()) + 1;
 
-					if (i > passCnt) {
+					if (nStage > gameCnt) {
 						showPopup();
 						return;
 					}
 
 					WordPool pool = WordPool.getInstance();
-					String str = String.format("dic/%dstage_dic.json", i);
+					String str = String.format("dic/%dstage_dic.json", nStage);
 					// Gdx.app.log(TAG, str);
 					pool.loadJson(str);
 
 					if (gameMain.recognizerCtrl != null) {
 						String gram = String.format(
-								"models/grammar/words/%dstage.gram", i);
+								"models/grammar/words/%dstage.gram", nStage);
 						gameMain.recognizerCtrl.loadGrammar(gram);
 					}
 
