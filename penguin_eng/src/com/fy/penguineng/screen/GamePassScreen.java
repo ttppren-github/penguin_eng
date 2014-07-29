@@ -150,7 +150,8 @@ public class GamePassScreen implements Screen {
 				String s = pool.getStage();
 				int i = Integer.valueOf(s) + 1;
 
-				if (i >= SwichScreen.passCnt) {
+				IScoreManager sm = ScoreManager.getInstance();
+				if (i > sm.getStageCount()) {
 					showPopup();
 					return;
 				}

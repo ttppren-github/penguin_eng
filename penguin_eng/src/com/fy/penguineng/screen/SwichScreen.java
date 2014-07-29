@@ -41,7 +41,6 @@ import com.fy.penguineng.world.WordPool;
  * 
  */
 public class SwichScreen implements Screen {
-	public static int passCnt;
 	private final static int MAX = 12;
 	// private final String TAG = "SwichScreen";
 	private BaseStage stage;
@@ -52,7 +51,7 @@ public class SwichScreen implements Screen {
 	private Table tab;
 	private Window window;
 	private Button btnOk;
-	private int gameCnt;
+	private int passCnt, gameCnt;
 
 	/**
 	 * 
