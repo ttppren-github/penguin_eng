@@ -35,6 +35,9 @@ public class Assets {
 	public final static String Btn = "btn";
 	public final static String BtnReturn = "ImageButton";
 	public final static String BtnStar = PATH + "normal_star.png";
+	public final static String BtnStar1 = PATH + "star1.png";
+	public final static String BtnStar2 = PATH + "star2.png";
+	public final static String BtnStar3 = PATH + "star3.png";
 	public final static String LockStar = PATH + "lock_star.png";
 	public final static String ListView = "List";
 
@@ -97,6 +100,9 @@ public class Assets {
 		manager.load(btnNormal, Texture.class);
 		manager.load(btnPressed, Texture.class);
 		manager.load(BtnStar, Texture.class);
+		manager.load(BtnStar1, Texture.class);
+		manager.load(BtnStar2, Texture.class);
+		manager.load(BtnStar3, Texture.class);
 		manager.load(LockStar, Texture.class);
 		manager.load(Ruler, Texture.class);
 
@@ -199,6 +205,15 @@ public class Assets {
 		ImageButtonStyle star = new ImageButtonStyle();
 		star.up = new TextureRegionDrawable(new TextureRegion(manager.get(
 				BtnStar, Texture.class)));
+		ImageButtonStyle star1 = new ImageButtonStyle();
+		star1.up = new TextureRegionDrawable(new TextureRegion(manager.get(
+				BtnStar1, Texture.class)));
+		ImageButtonStyle star2 = new ImageButtonStyle();
+		star2.up = new TextureRegionDrawable(new TextureRegion(manager.get(
+				BtnStar2, Texture.class)));
+		ImageButtonStyle star3 = new ImageButtonStyle();
+		star3.up = new TextureRegionDrawable(new TextureRegion(manager.get(
+				BtnStar3, Texture.class)));
 		
 		ImageButtonStyle lockStar = new ImageButtonStyle();
 		lockStar.up = new TextureRegionDrawable(new TextureRegion(manager.get(
@@ -219,6 +234,9 @@ public class Assets {
 		skin.add(Btn, btnStyle);
 		skin.add(BtnReturn, imgBtnStyle);
 		skin.add(BtnStar, star);
+		skin.add(BtnStar1, star1);
+		skin.add(BtnStar2, star2);
+		skin.add(BtnStar3, star3);
 		skin.add(LockStar, lockStar);
 		skin.add(ListView, listStyle);
 	}

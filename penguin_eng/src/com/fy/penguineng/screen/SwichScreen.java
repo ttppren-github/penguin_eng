@@ -21,9 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -42,13 +42,13 @@ import com.fy.penguineng.world.WordPool;
  */
 public class SwichScreen implements Screen {
 	public static int passCnt;
+	private final static int MAX = 12;
 	// private final String TAG = "SwichScreen";
 	private BaseStage stage;
 	private PenguinEng gameMain;
 	private Image bg;
 	private ImageButton btnReturn;
 	private ArrayList<ImageButton> groups;
-	private Label[] labs;
 	private Table tab;
 	private Window window;
 	private Button btnOk;
@@ -195,15 +195,14 @@ public class SwichScreen implements Screen {
 		IScoreManager sm = ScoreManager.getInstance();
 		Assets assets = Assets.getInstance();
 
-		int gameCnt = 12;// sm.getStageCount();
+//		int gameCnt = 12;// sm.getStageCount();
 		passCnt = sm.getPassCount();
-		labs = new Label[gameCnt];
 
 		// must be clear befor add some
 		tab.clearChildren();
 		groups.clear();
 
-		for (int i = 0; i < gameCnt; i++) {
+		for (int i = 0; i < MAX; i++) {
 			ImageButton tBtn;
 
 			if (0 == i % 3) {
@@ -214,17 +213,26 @@ public class SwichScreen implements Screen {
 			if (i > passCnt) {
 				tBtn = new ImageButton(assets.skin, Assets.LockStar);
 			} else {
-				tBtn = new ImageButton(assets.skin, Assets.BtnStar);
+				switch (sm.getLevel(i + 1)) {
+				case 1:
+					tBtn = new ImageButton(assets.skin, Assets.BtnStar1);
+					break;
+				case 2:
+					tBtn = new ImageButton(assets.skin, Assets.BtnStar2);
+					break;
+				case 3:
+					tBtn = new ImageButton(assets.skin, Assets.BtnStar3);
+					break;
+				default:
+					tBtn = new ImageButton(assets.skin, Assets.BtnStar);
+					break;
+				}
 			}
 			tab.add(tBtn).width(110).pad(10);
 
 			if (i > passCnt) {
 				continue;
 			}
-
-			labs[i] = new Label(Integer.toString(sm.getLevel(i + 1)),
-					assets.skin, Assets.FONT);
-			tBtn.add(labs[i]);
 
 			tBtn.addListener(new ClickListener() {
 
