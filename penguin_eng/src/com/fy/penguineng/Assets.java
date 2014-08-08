@@ -42,6 +42,8 @@ public class Assets {
 	public final static String BgSucc = PATH + "success.png";
 	public final static String BgFail = PATH + "fail.png";
 	public final static String Blackboard = PATH + "blackboard.png";
+	public final static String Letter = PATH + "letter.png";
+	public final static String Medal = PATH + "medal.png";
 	public final static String ListView = "List";
 
 	public static final int CLOUD_WIDTH = 100;
@@ -111,6 +113,8 @@ public class Assets {
 		manager.load(BgSucc, Texture.class);
 		manager.load(BgFail, Texture.class);
 		manager.load(Blackboard, Texture.class);
+		manager.load(Letter, Texture.class);
+		manager.load(Medal, Texture.class);
 
 		// manager.finishLoading();
 		Gdx.app.log(TAG, "loadResources()");
@@ -196,10 +200,10 @@ public class Assets {
 
 	public void loadStyle() {
 		ButtonStyle btnStyle = new ButtonStyle();
-		btnStyle.over = new TextureRegionDrawable(new TextureRegion(manager.get(
-				btnNormal, Texture.class)));
-		btnStyle.up = new TextureRegionDrawable(new TextureRegion(
-				manager.get(btnPressed, Texture.class)));
+		btnStyle.over = new TextureRegionDrawable(new TextureRegion(
+				manager.get(btnNormal, Texture.class)));
+		btnStyle.up = new TextureRegionDrawable(new TextureRegion(manager.get(
+				btnPressed, Texture.class)));
 
 		LabelStyle labelStyle = new LabelStyle((BitmapFont) manager.get(FONT),
 				Color.BLACK);
@@ -220,7 +224,7 @@ public class Assets {
 		ImageButtonStyle star3 = new ImageButtonStyle();
 		star3.up = new TextureRegionDrawable(new TextureRegion(manager.get(
 				BtnStar3, Texture.class)));
-		
+
 		ImageButtonStyle lockStar = new ImageButtonStyle();
 		lockStar.up = new TextureRegionDrawable(new TextureRegion(manager.get(
 				LockStar, Texture.class)));
