@@ -4,10 +4,6 @@
 package com.fy.penguineng.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -15,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
@@ -23,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fy.penguineng.Assets;
-import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.FreetypeFontWrap;
 import com.fy.penguineng.PenguinEng;
 
@@ -31,12 +25,10 @@ import com.fy.penguineng.PenguinEng;
  * @author liufy
  * 
  */
-public class MainMenuScreen implements Screen {
+public class MainMenuScreen extends BaseScreen {
 
-	private BaseStage stage;
 	private PenguinEng game;
 	private Button btnStart, btnOk, btnCancel;
-	private Image bg;
 	private FreetypeFontWrap font;
 	private LabelStyle labelStyle;
 	private Window window;
@@ -47,10 +39,7 @@ public class MainMenuScreen implements Screen {
 	public MainMenuScreen(PenguinEng game) {
 		this.game = game;
 
-		Assets assets = Assets.getInstance();
-		stage = new BaseStage();
-		bg = new Image(assets.getTexture(Assets.MainMenu_Bg));
-		stage.addActor(bg);
+		this.setBackground(assets.getTexture(Assets.MainMenu_Bg));
 
 		font = new FreetypeFontWrap();
 		labelStyle = new LabelStyle(font.getFont("开始退出"), Color.BLACK);
@@ -59,50 +48,15 @@ public class MainMenuScreen implements Screen {
 		btnStart = new Button(assets.skin, Assets.Btn);
 		btnStart.add(lab);
 		btnStart.setPosition(120, 220);
-		stage.addActor(btnStart);
+		baseStage.addActor(btnStart);
 		btnStart.addListener(clicListener);
-	}
 
-	@Override
-	public void render(float delta) {
-		stage.act(delta);
-		stage.draw();
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
-	}
-
-	@Override
-	public void show() {
-		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(stage);
-		inputMultiplexer.addProcessor(new ScreenInputHandler());
-
-		Gdx.input.setInputProcessor(inputMultiplexer);
-	}
-
-	@Override
-	public void hide() {
-		Gdx.input.setInputProcessor(null);
-	}
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
+		this.setOnBack(backListener);
 	}
 
 	@Override
 	public void dispose() {
-		stage.dispose();
+		super.dispose();
 		font.dispose();
 	}
 
@@ -121,65 +75,18 @@ public class MainMenuScreen implements Screen {
 
 	};
 
-	private class ScreenInputHandler implements InputProcessor {
+	private onBackListener backListener = new onBackListener() {
 
 		@Override
-		public boolean keyDown(int keycode) {
-
-			if (keycode == Keys.BACK || keycode == Keys.BACKSPACE
-					|| Keys.ESCAPE == keycode) {
-				if (window != null && window.isVisible()) {
-					closePopup();
-				} else {
-					showPopup();
-				}
+		public void onBack() {
+			if (window != null && window.isVisible()) {
+				closePopup();
+			} else {
+				showPopup();
 			}
-			return true;
 		}
 
-		@Override
-		public boolean keyUp(int keycode) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean keyTyped(char character) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean touchDown(int screenX, int screenY, int pointer,
-				int button) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean touchDragged(int screenX, int screenY, int pointer) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean mouseMoved(int screenX, int screenY) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean scrolled(int amount) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-	}
+	};
 
 	private void showPopup() {
 		Assets assets = Assets.getInstance();
@@ -205,7 +112,7 @@ public class MainMenuScreen implements Screen {
 		btnOk.setPosition(80, 70);
 		window.addActor(btnOk);
 
-		stage.addActor(window);
+		baseStage.addActor(window);
 	}
 
 	private void closePopup() {

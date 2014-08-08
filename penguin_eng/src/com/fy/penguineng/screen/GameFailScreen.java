@@ -3,8 +3,6 @@
  */
 package com.fy.penguineng.screen;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -17,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fy.penguineng.Assets;
-import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.FreetypeFontWrap;
 import com.fy.penguineng.PenguinEng;
 import com.fy.penguineng.TtsCtrl;
@@ -28,14 +25,13 @@ import com.fy.penguineng.world.WordPool;
  * @author liufy
  * 
  */
-public class GameFailScreen implements Screen {
-	private final String TAG = GameFailScreen.class.getSimpleName();
+public class GameFailScreen extends BaseScreen {
+	// private final String TAG = GameFailScreen.class.getSimpleName();
 	private final String RETURN = "选择关卡";
 	private final String RESTART = "重玩";
 	private PenguinEng gameMain;
-	private BaseStage stage;
 	private Button btnBack, btnRestart;
-	private List list;
+	private List<String> list;
 	private TextArea tx;
 	private String selectedWord;
 	private ITtsCtrl speaker;
@@ -46,8 +42,6 @@ public class GameFailScreen implements Screen {
 	public GameFailScreen(PenguinEng game) {
 		this.gameMain = game;
 		selectedWord = "";
-
-		stage = new BaseStage();
 
 		FreetypeFontWrap font = new FreetypeFontWrap();
 		LabelStyle labelStyle = new LabelStyle(font.getFont(RETURN + RESTART),
@@ -61,7 +55,7 @@ public class GameFailScreen implements Screen {
 		btnRestart.add(new Label(RESTART, labelStyle));
 		btnRestart.addListener(clickListener);
 
-		list = new List(Assets.getInstance().skin, Assets.ListView);
+		list = new List<String>(Assets.getInstance().skin, Assets.ListView);
 		final ScrollPane scroller = new ScrollPane(list);
 		list.addListener(clickListener);
 
@@ -82,16 +76,14 @@ public class GameFailScreen implements Screen {
 
 		tableRoot.pad(160, 20, 40, 20);
 
-		stage.addActor(tx);
-		stage.addActor(tableRoot);
+		baseStage.addActor(tx);
+		baseStage.addActor(tableRoot);
 
 		speaker = new TtsCtrl();
 	}
 
 	@Override
 	public void render(float delta) {
-		stage.act(delta);
-
 		String str = (String) list.getSelected();
 		if (!str.matches(selectedWord)) {
 			TextFieldStyle style = new TextFieldStyle();
@@ -107,42 +99,15 @@ public class GameFailScreen implements Screen {
 			tx.setText(text);
 		}
 
-		stage.draw();
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
+		super.render(delta);
 	}
 
 	@Override
 	public void show() {
 		list.setItems(WordPool.getInstance().getFailWords());
+		this.setBackground(assets.getTexture(Assets.BgFail));
 
-		Gdx.input.setInputProcessor(stage);
-	}
-
-	@Override
-	public void hide() {
-		Gdx.input.setInputProcessor(null);
-	}
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void dispose() {
-		stage.dispose();
-		Gdx.app.log(TAG, "dispose()");
+		super.show();
 	}
 
 	private ClickListener clickListener = new ClickListener() {

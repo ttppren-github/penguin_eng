@@ -5,11 +5,6 @@ package com.fy.penguineng.screen;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -18,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -29,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.esotericsoftware.tablelayout.BaseTableLayout;
 import com.fy.penguineng.Assets;
-import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.FreetypeFontWrap;
 import com.fy.penguineng.PenguinEng;
 import com.fy.penguineng.ScoreManager;
@@ -40,12 +33,10 @@ import com.fy.penguineng.world.WordPool;
  * @author liufy
  * 
  */
-public class SwichScreen implements Screen {
+public class SwichScreen extends BaseScreen {
 	private final static int MAX = 12;
 	// private final String TAG = "SwichScreen";
-	private BaseStage stage;
 	private PenguinEng gameMain;
-	private Image bg;
 	private ImageButton btnReturn;
 	private ArrayList<ImageButton> groups;
 	private Table tab;
@@ -61,14 +52,11 @@ public class SwichScreen implements Screen {
 		this.gameMain = game;
 		groups = new ArrayList<ImageButton>();
 
-		Assets assets = Assets.getInstance();
-		stage = new BaseStage();
-		bg = new Image(assets.getTexture(Assets.SwitchScreen_Bg));
-		stage.addActor(bg);
+		this.setBackground(assets.getTexture(Assets.SwitchScreen_Bg));
 
 		btnReturn = new ImageButton(assets.skin, Assets.BtnReturn);
 		btnReturn.setPosition(20, (float) (Assets.VIRTUAL_HEIGHT * 0.92) - 20);
-		stage.addActor(btnReturn);
+		baseStage.addActor(btnReturn);
 		btnReturn.addListener(new ClickListener() {
 
 			@Override
@@ -90,106 +78,31 @@ public class SwichScreen implements Screen {
 		TextureRegion bg = new TextureRegion(new Texture(pm));
 		tab.setBackground(new TextureRegionDrawable(bg));
 
-		stage.addActor(tab);
-	}
+		baseStage.addActor(tab);
 
-	@Override
-	public void render(float delta) {
-		stage.act(delta);
-		stage.draw();
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
+		this.setOnBack(backListener);
 	}
 
 	@Override
 	public void show() {
 		refreshStat();
-
-		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(stage);
-		inputMultiplexer.addProcessor(new ScreenInputHandler());
-		Gdx.input.setInputProcessor(inputMultiplexer);
-	}
-
-	@Override
-	public void hide() {
-		Gdx.input.setInputProcessor(null);
-	}
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
+		super.show();
 	}
 
 	@Override
 	public void dispose() {
 		groups.clear();
-		stage.dispose();
+		super.dispose();
 	}
 
-	private class ScreenInputHandler implements InputProcessor {
+	private onBackListener backListener = new onBackListener() {
 
 		@Override
-		public boolean keyDown(int keycode) {
-			if (keycode == Keys.BACK || keycode == Keys.BACKSPACE) {
-				gameMain.setScreen(gameMain.mainScreen);
-			}
-			return false;
+		public void onBack() {
+			gameMain.setScreen(gameMain.mainScreen);
 		}
 
-		@Override
-		public boolean keyUp(int keycode) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean keyTyped(char character) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean touchDown(int screenX, int screenY, int pointer,
-				int button) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean touchDragged(int screenX, int screenY, int pointer) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean mouseMoved(int screenX, int screenY) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean scrolled(int amount) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-	}
+	};
 
 	private void refreshStat() {
 		IScoreManager sm = ScoreManager.getInstance();
@@ -299,7 +212,7 @@ public class SwichScreen implements Screen {
 		btnOk.setPosition(80, 70);
 		window.addActor(btnOk);
 
-		stage.addActor(window);
+		baseStage.addActor(window);
 	}
 
 	private void closePopup() {

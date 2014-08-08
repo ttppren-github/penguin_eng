@@ -3,8 +3,6 @@
  */
 package com.fy.penguineng.screen;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -24,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.fy.penguineng.Assets;
-import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.FreetypeFontWrap;
 import com.fy.penguineng.PenguinEng;
 import com.fy.penguineng.ScoreManager;
@@ -35,7 +32,7 @@ import com.fy.penguineng.world.WordPool;
  * @author liufy
  * 
  */
-public class GamePassScreen implements Screen {
+public class GamePassScreen extends BaseScreen {
 	private final String RETRY = "再来一次";
 	private final String NEXT = "下一关";
 	private final String RETURN = "主菜单";
@@ -43,8 +40,6 @@ public class GamePassScreen implements Screen {
 	private final String[] C2 = { "环保卫士", "环保斗士", "环保勇士" };
 
 	private PenguinEng gameMain;
-
-	private BaseStage stage;
 	private Button btnRetry, btnBack, btnNext;
 	private TextArea c1;
 
@@ -53,7 +48,6 @@ public class GamePassScreen implements Screen {
 	 */
 	public GamePassScreen(PenguinEng game) {
 		this.gameMain = game;
-		stage = new BaseStage();
 
 		FreetypeFontWrap font = new FreetypeFontWrap();
 		LabelStyle labelStyle = new LabelStyle(font.getFont(RETURN + RETRY
@@ -82,7 +76,7 @@ public class GamePassScreen implements Screen {
 		tableRoot.add(btnBack);
 		tableRoot.defaults().align(Align.center);
 		tableRoot.padTop(50);
-		stage.addActor(tableRoot);
+		baseStage.addActor(tableRoot);
 
 		// Check score
 		int key = Integer.valueOf(WordPool.getInstance().getStage());
@@ -95,45 +89,9 @@ public class GamePassScreen implements Screen {
 		lStyle.fontColor = Color.BLACK;
 		c1 = new TextArea(text, lStyle);
 		c1.setBounds(40, 540, 400, 120);
-		stage.addActor(c1);
-	}
+		baseStage.addActor(c1);
 
-	@Override
-	public void render(float delta) {
-		stage.act(delta);
-		stage.draw();
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
-	}
-
-	@Override
-	public void show() {
-		Gdx.input.setInputProcessor(stage);
-	}
-
-	@Override
-	public void hide() {
-		Gdx.input.setInputProcessor(null);
-	}
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void dispose() {
-		stage.dispose();
+		this.setBackground(assets.getTexture(Assets.BgSucc));
 	}
 
 	private ClickListener clickListener = new ClickListener() {
@@ -207,7 +165,7 @@ public class GamePassScreen implements Screen {
 		btnOk.setPosition(80, 70);
 		window.addActor(btnOk);
 
-		stage.addActor(window);
+		baseStage.addActor(window);
 	}
 
 	private void closePopup() {

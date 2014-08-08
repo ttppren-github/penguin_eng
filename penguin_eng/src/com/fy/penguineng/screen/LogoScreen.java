@@ -4,13 +4,11 @@
 package com.fy.penguineng.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SizeToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.fy.penguineng.Assets;
-import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.PenguinEng;
 import com.fy.penguineng.TtsCtrl;
 
@@ -18,12 +16,11 @@ import com.fy.penguineng.TtsCtrl;
  * @author liufy
  * 
  */
-public class LogoScreen implements Screen {
+public class LogoScreen extends BaseScreen {
 	private final String TAG = LogoScreen.class.getSimpleName();
 
 	private PenguinEng game;
 	private Image logo, name;
-	private BaseStage stage;
 	private float start;
 	private final float DELAY = 3; // 3s
 	private TtsCtrl player;
@@ -35,21 +32,20 @@ public class LogoScreen implements Screen {
 		this.game = game;
 		start = 0;
 
-		stage = new BaseStage();
 		Assets.getInstance().preLoading();
 		logo = new Image(Assets.getInstance().logo);
 		name = new Image(Assets.getInstance().name);
 
-		stage.addActor(logo);
-		stage.addActor(name);
+		baseStage.addActor(logo);
+		baseStage.addActor(name);
 	}
 
 	@Override
 	public void render(float delta) {
-		stage.act();
+		baseStage.act();
 		logo.setPosition((Assets.VIRTUAL_WIDTH - logo.getWidth()) / 2,
 				(Assets.VIRTUAL_HEIGHT - logo.getHeight()) * 2 / 3);
-		stage.draw();
+		baseStage.draw();
 
 		start += delta;
 		if (game.assets.update()) {
@@ -59,11 +55,6 @@ public class LogoScreen implements Screen {
 				game.resourceReady();
 			}
 		}
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
 	}
 
 	@Override
@@ -94,20 +85,8 @@ public class LogoScreen implements Screen {
 	}
 
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void dispose() {
 		Assets.getInstance().unLoadPreLoading();
-		stage.dispose();
+		super.dispose();
 	}
 }

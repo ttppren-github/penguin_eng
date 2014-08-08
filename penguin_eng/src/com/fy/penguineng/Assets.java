@@ -39,6 +39,8 @@ public class Assets {
 	public final static String BtnStar2 = PATH + "star2.png";
 	public final static String BtnStar3 = PATH + "star3.png";
 	public final static String LockStar = PATH + "lock_star.png";
+	public final static String BgSucc = PATH + "success.png";
+	public final static String BgFail = PATH + "fail.png";
 	public final static String ListView = "List";
 
 	public static final int CLOUD_WIDTH = 100;
@@ -105,6 +107,8 @@ public class Assets {
 		manager.load(BtnStar3, Texture.class);
 		manager.load(LockStar, Texture.class);
 		manager.load(Ruler, Texture.class);
+		manager.load(BgSucc, Texture.class);
+		manager.load(BgFail, Texture.class);
 
 		// manager.finishLoading();
 		Gdx.app.log(TAG, "loadResources()");
