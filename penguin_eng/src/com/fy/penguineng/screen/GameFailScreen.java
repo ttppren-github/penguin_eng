@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -33,6 +34,7 @@ public class GameFailScreen extends BaseScreen {
 	private Button btnBack, btnRestart;
 	private List<String> list;
 	private TextArea tx;
+	private Image blackboardImg;
 	private String selectedWord;
 	private ITtsCtrl speaker;
 
@@ -63,7 +65,11 @@ public class GameFailScreen extends BaseScreen {
 		tfStyle.font = Assets.getInstance().getFont();
 		tfStyle.fontColor = Color.RED;
 		tx = new TextArea("", tfStyle);
-		tx.setBounds(40, 640, 400, 120);
+		tx.setBounds(40, 620, 400, 120);
+		blackboardImg = new Image(assets.getTexture(Assets.Blackboard));
+		blackboardImg.setBounds(10, 640, 460, 140);
+		baseStage.addActor(blackboardImg);
+		baseStage.addActor(tx);
 
 		final Table tableRoot = new Table();
 		tableRoot.setFillParent(true);
@@ -73,10 +79,7 @@ public class GameFailScreen extends BaseScreen {
 		tableRoot.add(btnBack);
 		tableRoot.row();
 		tableRoot.add(btnRestart);
-
 		tableRoot.pad(160, 20, 40, 20);
-
-		baseStage.addActor(tx);
 		baseStage.addActor(tableRoot);
 
 		speaker = new TtsCtrl();
@@ -94,7 +97,7 @@ public class GameFailScreen extends BaseScreen {
 			tx.clear();
 
 			style.font = font.getFont(text, 24);
-			style.fontColor = Color.BLACK;
+			style.fontColor = Color.WHITE;
 			tx.setStyle(style);
 			tx.setText(text);
 		}
@@ -104,6 +107,7 @@ public class GameFailScreen extends BaseScreen {
 
 	@Override
 	public void show() {
+//		WordPool.getInstance().loadJson("dic/1stage_dic.json");
 		list.setItems(WordPool.getInstance().getFailWords());
 		this.setBackground(assets.getTexture(Assets.BgFail));
 

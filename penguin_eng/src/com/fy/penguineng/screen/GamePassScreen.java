@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -41,7 +42,7 @@ public class GamePassScreen extends BaseScreen {
 
 	private PenguinEng gameMain;
 	private Button btnRetry, btnBack, btnNext;
-	private TextArea c1;
+	private TextArea blackboard;
 
 	/**
 	 * 
@@ -87,9 +88,9 @@ public class GamePassScreen extends BaseScreen {
 		TextFieldStyle lStyle = new TextFieldStyle();
 		lStyle.font = font.getFont(text, 24);
 		lStyle.fontColor = Color.BLACK;
-		c1 = new TextArea(text, lStyle);
-		c1.setBounds(40, 540, 400, 120);
-		baseStage.addActor(c1);
+		blackboard = new TextArea(text, lStyle);
+		blackboard.setBounds(40, 540, 400, 120);
+		baseStage.addActor(blackboard);
 
 		this.setBackground(assets.getTexture(Assets.BgSucc));
 	}
