@@ -41,7 +41,7 @@ import com.fy.penguineng.world.WordPool;
 public class GamePassScreen extends BaseScreen {
 	private final String RETRY = "再来一次";
 	private final String NEXT = "下一关";
-	private final String RETURN = "主菜单";
+	private final String RETURN = "选择管卡";
 	private final String SHARE = "分享";
 	private final String C1 = "恭喜您：\n        在本关中成功阻止雪山融化，并获得\"%s\"称号。";
 	private final String[] C2 = { "环保卫士", "环保斗士", "环保勇士" };
@@ -129,7 +129,7 @@ public class GamePassScreen extends BaseScreen {
 				WordPool.getInstance().reload();
 				gameMain.setScreen(gameMain.gameScreen);
 			} else if (event.getListenerActor() == btnBack) {
-				gameMain.setScreen(gameMain.mainScreen);
+				gameMain.setScreen(gameMain.swichScreen);
 			} else if (event.getListenerActor() == btnNext) {
 				WordPool pool = WordPool.getInstance();
 				String s = pool.getStage();

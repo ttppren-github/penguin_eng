@@ -42,7 +42,7 @@ public class Assets {
 	public final static String BgSucc = PATH + "success.png";
 	public final static String BgFail = PATH + "fail.png";
 	public final static String Blackboard = PATH + "blackboard.png";
-	public final static String Letter = PATH + "letter.png";
+	public final static String Letter = PATH + "certificate.png";
 	public final static String Medal = PATH + "medal.png";
 	public final static String ListView = "List";
 
