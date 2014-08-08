@@ -162,12 +162,12 @@ public class GamePassScreen extends BaseScreen {
 	private void showPopup() {
 		Assets assets = Assets.getInstance();
 		FreetypeFontWrap font = new FreetypeFontWrap();
-		BitmapFont bFont = font.getFont("知道了正在建设中，敬请期待。");
+		BitmapFont bFont = font.getFont("知道了更多管卡，期待您的反馈。");
 		LabelStyle labelStyle = new LabelStyle(bFont, Color.BLACK);
 
 		WindowStyle style = new WindowStyle(bFont, Color.BLACK, null);
 
-		window = new Window("正在建设中，敬请期待。", style);
+		window = new Window("更多管卡，期待您的反馈和参与。", style);
 		window.setWidth(400);
 		window.setHeight(200);
 		window.setPosition(40, 200);
