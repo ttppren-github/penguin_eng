@@ -143,17 +143,15 @@ public class SwichScreen extends BaseScreen {
 			}
 			tab.add(tBtn).width(110).pad(10);
 
-			if (i > gameCnt) {
-				continue;
-			}
-
 			tBtn.addListener(new ClickListener() {
 
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
 					int nStage = groups.indexOf(event.getListenerActor()) + 1;
 
-					if (nStage > gameCnt) {
+					if (nStage > passCnt + 1) {
+						return;
+					} else if (nStage > gameCnt) {
 						showPopup();
 						return;
 					}
