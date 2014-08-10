@@ -33,6 +33,7 @@ public class Assets {
 	public final static String SwitchScreen_Bg = PATH + "switch_bg.png";
 	public final static String Ruler = PATH + "ruler.png";
 	public final static String Btn = "btn";
+	public final static String BtnSmall = "btnSmall";
 	public final static String BtnReturn = "ImageButton";
 	public final static String BtnStar = PATH + "normal_star.png";
 	public final static String BtnStar1 = PATH + "star1.png";
@@ -44,6 +45,7 @@ public class Assets {
 	public final static String Blackboard = PATH + "blackboard.png";
 	public final static String Letter = PATH + "certificate.png";
 	public final static String Medal = PATH + "medal.png";
+	public final static String PopUp = PATH + "pop.png";
 	public final static String ListView = "List";
 
 	public static final int CLOUD_WIDTH = 100;
@@ -63,6 +65,8 @@ public class Assets {
 	private static Assets instance;
 	private final String btnNormal = PATH + "btn_normal.png";
 	private final String btnPressed = PATH + "btn_pressed.png";
+	private final String btnNormalSmall = PATH + "btn_normal_small.png";
+	private final String btnPressedSmall = PATH + "btn_pressed_small.png";
 
 	public Assets() {
 		manager = new AssetManager();
@@ -104,6 +108,8 @@ public class Assets {
 		manager.load(SwitchScreen_Bg, Texture.class);
 		manager.load(btnNormal, Texture.class);
 		manager.load(btnPressed, Texture.class);
+		manager.load(btnNormalSmall, Texture.class);
+		manager.load(btnPressedSmall, Texture.class);
 		manager.load(BtnStar, Texture.class);
 		manager.load(BtnStar1, Texture.class);
 		manager.load(BtnStar2, Texture.class);
@@ -115,6 +121,7 @@ public class Assets {
 		manager.load(Blackboard, Texture.class);
 		manager.load(Letter, Texture.class);
 		manager.load(Medal, Texture.class);
+		manager.load(PopUp, Texture.class);
 
 		// manager.finishLoading();
 		Gdx.app.log(TAG, "loadResources()");
@@ -205,6 +212,12 @@ public class Assets {
 		btnStyle.up = new TextureRegionDrawable(new TextureRegion(manager.get(
 				btnPressed, Texture.class)));
 
+		ButtonStyle btnStyleSmall = new ButtonStyle();
+		btnStyleSmall.over = new TextureRegionDrawable(new TextureRegion(
+				manager.get(btnNormalSmall, Texture.class)));
+		btnStyleSmall.up = new TextureRegionDrawable(new TextureRegion(manager.get(
+				btnPressedSmall, Texture.class)));
+
 		LabelStyle labelStyle = new LabelStyle((BitmapFont) manager.get(FONT),
 				Color.BLACK);
 
@@ -242,6 +255,7 @@ public class Assets {
 		skin = new Skin();
 		skin.add(FONT, labelStyle);
 		skin.add(Btn, btnStyle);
+		skin.add(BtnSmall, btnStyleSmall);
 		skin.add(BtnReturn, imgBtnStyle);
 		skin.add(BtnStar, star);
 		skin.add(BtnStar1, star1);
