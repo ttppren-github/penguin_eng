@@ -8,28 +8,41 @@ import java.io.IOException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.fy.penguineng.icontrol.IGameControl;
 import com.fy.sphinx.WordRecognizer;
-import com.fy.sphinx.WordRecognizerSetup;
 import com.fy.sphinx.WordRecognizer.VolumeListener;
+import com.fy.sphinx.WordRecognizerSetup;
+import com.tencent.mm.sdk.modelbase.BaseReq;
+import com.tencent.mm.sdk.modelbase.BaseResp;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
 
 public class MainActivity extends AndroidApplication {
+	private final String TAG = "Starfish English";
 	private static final String DIGITS_SEARCH = "digits";
 	private WordRecognizer recognizer;
 	private PenguinEng game;
-	private TextToSpeech tts;
 	private AutoUpdateApk aua;
 	private File appDir;
 	private Context ctx;
@@ -39,6 +52,7 @@ public class MainActivity extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		ctx = this;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
 		game = new PenguinEng();
@@ -53,12 +67,6 @@ public class MainActivity extends AndroidApplication {
 	protected void onDestroy() {
 		if (aua != null) {
 			aua.stop();
-		}
-		if (tts != null) {
-			if (tts.isSpeaking()) {
-				tts.stop();
-			}
-			tts.shutdown();
 		}
 
 		if (recognizer != null) {
@@ -102,20 +110,7 @@ public class MainActivity extends AndroidApplication {
 		}
 	};
 
-	TextToSpeech.OnInitListener TtsInitListener = new TextToSpeech.OnInitListener() {
-		@Override
-		public void onInit(int status) {
-			tts.setPitch((float) 1.0);
-			tts.setSpeechRate((float) 1.0);
-		}
-	};
 	private IGameControl ttsListener = new IGameControl() {
-		public void speakOut(String word) {
-			if (tts != null) {
-				tts.speak(word, TextToSpeech.QUEUE_ADD, null);
-			}
-
-		}
 
 		@Override
 		public void startRecognizer() {
@@ -128,11 +123,6 @@ public class MainActivity extends AndroidApplication {
 		}
 
 		@Override
-		public void closeGame() {
-			finish();
-		}
-
-		@Override
 		public void loadGrammar(String file) {
 			if (file == null || file.isEmpty()) {
 				return;
@@ -140,11 +130,6 @@ public class MainActivity extends AndroidApplication {
 
 			File digitsGrammar = new File(appDir, file);
 			recognizer.addGrammarSearch(DIGITS_SEARCH, digitsGrammar);
-		}
-
-		@Override
-		public boolean isSpeaking() {
-			return tts.isSpeaking();
 		}
 
 		@Override
@@ -162,6 +147,17 @@ public class MainActivity extends AndroidApplication {
 			}
 
 			return false;
+		}
+
+		@Override
+		public void shareToWX() {
+			shareWeiXin();
+		}
+
+		@Override
+		public void showAbout() {
+			Intent intent = new Intent(ctx, Welcome.class);
+			ctx.startActivity(intent);
 		}
 	};
 
@@ -202,8 +198,6 @@ public class MainActivity extends AndroidApplication {
 		recognizer.addListener(recognitionListener);
 		recognizer.addListener(listener);
 
-		tts = new TextToSpeech(getApplicationContext(), TtsInitListener);
-
 		// Start to check new version
 		aua = new AutoUpdateApk(getApplicationContext());
 		aua.start();
@@ -217,6 +211,69 @@ public class MainActivity extends AndroidApplication {
 		@Override
 		public void run() {
 			initVoice();
+		}
+
+	};
+
+	private IWXAPI wxApi;
+
+	private void initWXShare() {
+		wxApi = WXAPIFactory.createWXAPI(this, "");
+		wxApi.registerApp("");
+		wxApi.handleIntent(getIntent(), wxEventHandler);
+
+		Log.d(TAG, "initWXShare");
+	}
+
+	public void shareWeiXin() {
+		initWXShare();
+		if (!Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED)) {
+
+			Log.d(TAG, "external storage error");
+			return;
+		}
+
+		String pathName = Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/starfish/shot.png";
+		WXWebpageObject webpage = new WXWebpageObject();
+		webpage.webpageUrl = "http://apk.91.com/Soft/Android/com.fy.penguineng-1.html";
+		WXMediaMessage msg = new WXMediaMessage(webpage);
+		msg.title = "Starfish English";
+		msg.description = "这里填写内容";
+		// 这里替换一张自己工程里的图片资源
+		Bitmap thumb = BitmapFactory.decodeFile(pathName);
+		msg.setThumbImage(thumb);
+
+		SendMessageToWX.Req req = new SendMessageToWX.Req();
+		req.transaction = String.valueOf(System.currentTimeMillis());
+		req.message = msg;
+		req.scene = SendMessageToWX.Req.WXSceneTimeline;
+		wxApi.sendReq(req);
+
+		Log.d(TAG, "Send request");
+	}
+
+	private IWXAPIEventHandler wxEventHandler = new IWXAPIEventHandler() {
+
+		@Override
+		public void onReq(BaseReq arg0) {
+		}
+
+		@Override
+		public void onResp(BaseResp resp) {
+
+			switch (resp.errCode) {
+			case BaseResp.ErrCode.ERR_OK:
+				Toast.makeText(ctx, "分享成功", Toast.LENGTH_LONG).show();
+				break;
+			case BaseResp.ErrCode.ERR_USER_CANCEL:
+
+				break;
+			case BaseResp.ErrCode.ERR_AUTH_DENIED:
+				Toast.makeText(ctx, "分享失败", Toast.LENGTH_LONG).show();
+				break;
+			}
 		}
 
 	};

@@ -2,11 +2,9 @@
 
 grammar digits;
 
-<digit> =	hello               |
-			welcome                |
+<digit> =	welcome                |
 			good               |
 			thanks                |
-			boy                |
 			girl                 |
 			football              |
 			morning               |
@@ -14,9 +12,7 @@ grammar digits;
 			blue                |
 			color                   |
 			happy              |
-			sleep               |
 			fast                |
-			how do you do                |
 			believe                   |
 			good night	|
 			have fun	|

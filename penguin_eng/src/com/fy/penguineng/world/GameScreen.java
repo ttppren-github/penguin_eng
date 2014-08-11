@@ -48,24 +48,18 @@ public class GameScreen implements Screen {
 		state = GAME_STATE_STOPPED;
 
 		uiStage = new BaseStage();
-		gameStage = new GameStage(game.ttsListener);
+		gameStage = new GameStage(game.recognizerCtrl);
 		gameStage.setPlayCtrlListener(playStateListener);
 
 		Assets assets = Assets.getInstance();
 
 		btnStop = new ImageButton(assets.skin, Assets.BtnReturn);
-		btnStop.setPosition(20, (float) (Assets.VIRTUAL_HEIGHT * 0.9) - 20);
+		btnStop.setPosition(Assets.VIRTUAL_WIDTH - btnStop.getWidth(), 20);
 		gameStage.addActor(btnStop);
-		btnStop.addListener(new ClickListener() {
-
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				pause();
-			}
-		});
+		btnStop.addListener(clickLinster);
 
 		Pixmap pixmap = new Pixmap(480, 800, Pixmap.Format.RGBA8888);
-		pixmap.setColor(10f, 10f, 10f, 0.7f);
+		pixmap.setColor(1f, 1f, 1f, 0.7f);
 		pixmap.fillRectangle(0, 0, 480, 800);
 		Texture tx = new Texture(pixmap);
 		uiStage.addActor(new Image(tx));
@@ -79,37 +73,19 @@ public class GameScreen implements Screen {
 		btnSwitch.add(new Label(SWITCH, labelStyle));
 		btnSwitch.setPosition(120, 400);
 		uiStage.addActor(btnSwitch);
-		btnSwitch.addListener(new ClickListener() {
-
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				stop(game.swichScreen);
-			}
-		});
+		btnSwitch.addListener(clickLinster);
 
 		btnStart = new Button(assets.skin, Assets.Btn);
 		btnStart.add(new Label(CONTINUE, labelStyle));
 		btnStart.setPosition(120, 320);
 		uiStage.addActor(btnStart);
-		btnStart.addListener(new ClickListener() {
-
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				resume();
-			}
-		});
+		btnStart.addListener(clickLinster);
 
 		btnBack = new Button(assets.skin, Assets.Btn);
 		btnBack.add(new Label(RETURN, labelStyle));
 		btnBack.setPosition(120, 240);
 		uiStage.addActor(btnBack);
-		btnBack.addListener(new ClickListener() {
-
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				stop(game.mainScreen);
-			}
-		});
+		btnBack.addListener(clickLinster);
 	}
 
 	@Override
@@ -144,8 +120,8 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
-		if (null != game.ttsListener) {
-			game.ttsListener.stopRecognizer();
+		if (null != game.recognizerCtrl) {
+			game.recognizerCtrl.stopRecognizer();
 		}
 
 		Gdx.input.setInputProcessor(null);
@@ -155,16 +131,16 @@ public class GameScreen implements Screen {
 	public void pause() {
 		state = GAME_STATE_PAUSED;
 
-		if (null != game.ttsListener) {
-			game.ttsListener.stopRecognizer();
+		if (null != game.recognizerCtrl) {
+			game.recognizerCtrl.stopRecognizer();
 		}
 	}
 
 	private void stop(Screen screen) {
 		state = GAME_STATE_STOPPED;
 
-		if (null != game.ttsListener) {
-			game.ttsListener.stopRecognizer();
+		if (null != game.recognizerCtrl) {
+			game.recognizerCtrl.stopRecognizer();
 		}
 
 		game.setScreen(screen);
@@ -174,8 +150,8 @@ public class GameScreen implements Screen {
 	public void resume() {
 		state = GAME_STATE_RUNNING;
 
-		if (null != game.ttsListener) {
-			game.ttsListener.startRecognizer();
+		if (null != game.recognizerCtrl) {
+			game.recognizerCtrl.startRecognizer();
 		}
 	}
 
@@ -190,8 +166,8 @@ public class GameScreen implements Screen {
 		inputMultiplexer.addProcessor(new ScreenInputHandler());
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
-		if (null != game.ttsListener) {
-			game.ttsListener.startRecognizer();
+		if (null != game.recognizerCtrl) {
+			game.recognizerCtrl.startRecognizer();
 		}
 	}
 
@@ -287,4 +263,34 @@ public class GameScreen implements Screen {
 			return false;
 		}
 	}
+
+	private ClickListener clickLinster = new ClickListener() {
+
+		@Override
+		public void clicked(InputEvent event, float x, float y) {
+			if (GAME_STATE_RUNNING == state) {
+				if (event.getListenerActor() == btnStop) {
+					pause();
+					return;
+				}
+			}
+
+			if (GAME_STATE_PAUSED == state) {
+				if (event.getListenerActor() == btnSwitch) {
+					stop(game.swichScreen);
+					return;
+				}
+
+				if (event.getListenerActor() == btnStart) {
+					resume();
+					return;
+				}
+
+				if (event.getListenerActor() == btnBack) {
+					stop(game.mainScreen);
+					return;
+				}
+			}
+		}
+	};
 }

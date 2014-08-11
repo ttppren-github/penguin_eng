@@ -14,9 +14,12 @@ public class WordPool {
 	private static WordPool instance;
 	private Array<String> words;
 	private JsonValue val;
+	private String fileName;
+	private int oldRet;
 
 	private WordPool() {
 		words = new Array<String>();
+		oldRet = 0;
 	}
 
 	public static WordPool getInstance() {
@@ -71,6 +74,8 @@ public class WordPool {
 				words.add(word);
 			}
 		}
+
+		this.fileName = fileName;
 	}
 
 	public void reload() {
@@ -93,7 +98,6 @@ public class WordPool {
 	}
 
 	public boolean checkOver() {
-
 		return words.size == 0;
 	}
 
@@ -103,9 +107,13 @@ public class WordPool {
 
 	private int random() {
 		int ret = 0;
-		if (words.size > 0) {
-			ret = MathUtils.random(0, words.size - 1);
+		if (words.size > 1) {
+			while (oldRet == ret) {
+				ret = MathUtils.random(0, words.size - 1);
+			}
 		}
+
+		oldRet = ret;
 		return ret;
 	}
 
@@ -120,5 +128,13 @@ public class WordPool {
 		}
 
 		return ret;
+	}
+
+	public String getStage() {
+		if (fileName != null && fileName.length() > 1) {
+			return fileName.substring(4, 5);
+		}
+
+		return "0";
 	}
 }

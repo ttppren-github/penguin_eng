@@ -5,22 +5,20 @@ grammar digits;
 <digit> =	aboard               |
 			back                |
 			cake               |
-			dare	|
-			each                |
-			face                |
+			delicious	|
+			demand                |
+			democracy                |
 			gain                 |
 			habit              |
 			idea               |
 			jacket                |
 			lab                   |
-			machine              |
 			name               |
 			observe                |
-			pace                   |	
 			thank you	|
 			i love you  |
-			do me a favor		|
-			key                	 ;
+			do me a favor  |
+			deny                	 ;
 
           
 public <digits> = <digit>;

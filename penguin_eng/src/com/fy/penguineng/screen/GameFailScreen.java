@@ -3,13 +3,12 @@
  */
 package com.fy.penguineng.screen;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -17,26 +16,27 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.fy.penguineng.Assets;
-import com.fy.penguineng.BaseStage;
 import com.fy.penguineng.FreetypeFontWrap;
 import com.fy.penguineng.PenguinEng;
+import com.fy.penguineng.TtsCtrl;
+import com.fy.penguineng.icontrol.ITtsCtrl;
 import com.fy.penguineng.world.WordPool;
 
 /**
  * @author liufy
  * 
  */
-public class GameFailScreen implements Screen {
-	private final String TAG = GameFailScreen.class.getSimpleName();
+public class GameFailScreen extends BaseScreen {
+	// private final String TAG = GameFailScreen.class.getSimpleName();
 	private final String RETURN = "选择关卡";
 	private final String RESTART = "重玩";
-	private final String VOICE = "发音";
 	private PenguinEng gameMain;
-	private BaseStage stage;
-	private Button btnBack, btnRestart, btnVoice;
-	private List list;
+	private Button btnBack, btnRestart;
+	private List<String> list;
 	private TextArea tx;
+	private Image blackboardImg;
 	private String selectedWord;
+	private ITtsCtrl speaker;
 
 	/**
 	 * 
@@ -45,11 +45,9 @@ public class GameFailScreen implements Screen {
 		this.gameMain = game;
 		selectedWord = "";
 
-		stage = new BaseStage();
-
 		FreetypeFontWrap font = new FreetypeFontWrap();
-		LabelStyle labelStyle = new LabelStyle(font.getFont(RETURN + RESTART
-				+ VOICE), Color.BLACK);
+		LabelStyle labelStyle = new LabelStyle(font.getFont(RETURN + RESTART),
+				Color.BLACK);
 
 		btnBack = new Button(Assets.getInstance().skin, Assets.Btn);
 		btnBack.add(new Label(RETURN, labelStyle));
@@ -59,40 +57,36 @@ public class GameFailScreen implements Screen {
 		btnRestart.add(new Label(RESTART, labelStyle));
 		btnRestart.addListener(clickListener);
 
-		btnVoice = new Button(Assets.getInstance().skin, Assets.Btn);
-		btnVoice.add(new Label(VOICE, labelStyle));
-		btnVoice.addListener(clickListener);
-
-		list = new List(Assets.getInstance().skin, Assets.ListView);
+		list = new List<String>(Assets.getInstance().skin, Assets.ListView);
 		final ScrollPane scroller = new ScrollPane(list);
+		list.addListener(clickListener);
 
 		TextFieldStyle tfStyle = new TextFieldStyle();
 		tfStyle.font = Assets.getInstance().getFont();
 		tfStyle.fontColor = Color.RED;
 		tx = new TextArea("", tfStyle);
-		tx.setBounds(40, 640, 400, 120);
+		tx.setBounds(40, 620, 400, 120);
+		blackboardImg = new Image(assets.getTexture(Assets.Blackboard));
+		blackboardImg.setBounds(10, 640, 460, 140);
+		baseStage.addActor(blackboardImg);
+		baseStage.addActor(tx);
 
 		final Table tableRoot = new Table();
 		tableRoot.setFillParent(true);
 		tableRoot.row().spaceTop(20);
 		tableRoot.add(scroller);
 		tableRoot.row().spaceTop(20);
-		tableRoot.add(btnVoice);
-		tableRoot.row();
 		tableRoot.add(btnBack);
 		tableRoot.row();
 		tableRoot.add(btnRestart);
-
 		tableRoot.pad(160, 20, 40, 20);
+		baseStage.addActor(tableRoot);
 
-		stage.addActor(tx);
-		stage.addActor(tableRoot);
+		speaker = new TtsCtrl();
 	}
 
 	@Override
 	public void render(float delta) {
-		stage.act(delta);
-
 		String str = (String) list.getSelected();
 		if (!str.matches(selectedWord)) {
 			TextFieldStyle style = new TextFieldStyle();
@@ -102,48 +96,22 @@ public class GameFailScreen implements Screen {
 			String text = WordPool.getInstance().getText(selectedWord);
 			tx.clear();
 
-			style.font = font.getFont(replayHZ(text), 24);
-			style.fontColor = Color.BLACK;
+			style.font = font.getFont(text, 24);
+			style.fontColor = Color.WHITE;
 			tx.setStyle(style);
 			tx.setText(text);
 		}
 
-		stage.draw();
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
+		super.render(delta);
 	}
 
 	@Override
 	public void show() {
+//		WordPool.getInstance().loadJson("dic/1stage_dic.json");
 		list.setItems(WordPool.getInstance().getFailWords());
+		this.setBackground(assets.getTexture(Assets.BgFail));
 
-		Gdx.input.setInputProcessor(stage);
-	}
-
-	@Override
-	public void hide() {
-		Gdx.input.setInputProcessor(null);
-	}
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void dispose() {
-		stage.dispose();
-		Gdx.app.log(TAG, "dispose()");
+		super.show();
 	}
 
 	private ClickListener clickListener = new ClickListener() {
@@ -154,38 +122,15 @@ public class GameFailScreen implements Screen {
 			} else if (event.getListenerActor() == btnRestart) {
 				WordPool.getInstance().reload();
 				gameMain.setScreen(gameMain.gameScreen);
-			} else if (event.getListenerActor() == btnVoice) {
-				if (gameMain.ttsListener != null) {
-					gameMain.ttsListener.speakOut(selectedWord);
+			} else if (event.getListenerActor() == list) {
+				if (speaker != null) {
+					String path = "sounds/" + WordPool.getInstance().getStage()
+							+ "/" + selectedWord.replace(" ", "") + ".ogg";
+					speaker.unload();
+					speaker.load(path);
+					speaker.speakOut();
 				}
 			}
 		}
 	};
-
-	private String replayHZ(final String text) {
-		String ret = "";
-		StringBuffer strBuf = new StringBuffer();
-		char c;
-		int j;
-
-		if (text == null) {
-			return ret;
-		}
-
-		for (int i = 0; i < text.length(); i++) {
-			c = text.charAt(i);
-			for (j = 0; j < strBuf.length(); j++) {
-				if (c == strBuf.charAt(j)) {
-					break;
-				}
-			}
-
-			if (j == strBuf.length()) {
-				strBuf.append(c);
-			}
-		}
-
-		ret = strBuf.toString();
-		return ret;
-	}
 }

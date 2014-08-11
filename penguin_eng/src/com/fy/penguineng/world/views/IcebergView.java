@@ -1,9 +1,14 @@
 package com.fy.penguineng.world.views;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
 import com.fy.penguineng.Assets;
 
 public class IcebergView extends BaseView {
+
+	public IcebergView(Rectangle bounds) {
+		bound = bounds;
+	}
 
 	@Override
 	public void render(Batch batch) {
@@ -12,5 +17,8 @@ public class IcebergView extends BaseView {
 
 		batch.draw(assets.getTexture(Assets.ICEBERG), x, y, bound.width,
 				bound.height);
+
+		batch.draw(assets.getTexture(Assets.Ruler), 340, y);
 	}
+
 }

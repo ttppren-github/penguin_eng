@@ -1,6 +1,4 @@
 [
-{"name":"adjust",     							"yisi":"vt.调整，调节；校正"},
-{"name":"bag",     							"yisi":"n.袋，包，钱包，背包"},
 {"name":"calm",     							"yisi":"a.静的，平静的"},
 {"name":"damage",     							"yisi":"vt.损害,毁坏 n.损害"},
 {"name":"early",     							"yisi":"ad.早 a.早的，早期的"},
@@ -8,9 +6,6 @@
 {"name":"glory",     							"yisi":"n.光荣；荣誉的事"},
 {"name":"handsome",     						"yisi":"a.英俊的；相当大的"},
 {"name":"image",     							"yisi":"n.像；形象；映象"},
-{"name":"join",     							"yisi":"n.加入，参加"},
-{"name":"know",     				   			"yisi":"vt.知道；认识；通晓"},
-{"name":"lead",     				   			"yisi":"vt.为…带路；领导"},
 {"name":"manage",     				   			"yisi":"n.经理，管理人"},
 {"name":"neighbor",     				    		"yisi":"n.邻居，邻国，邻人"},
 {"name":"opportunity", 							"yisi":"n.机会，良机"},
@@ -18,4 +13,7 @@
 {"name":"come on",   							"yisi":"加油，振奋起来"},
 {"name":"let's go",   							"yisi":"跟我来，一起上"},
 {"name":"go home",    							"yisi":"回家"},
+{"name":"dark",    							"yisi":"n. 黑暗；暗色；暗处；阴影"},
+{"name":"danger",    							"yisi":"n. 危险；危害；风险；威胁"},
+{"name":"decent",    							"yisi":"adj. 像样的；相当不错的；尚好的；正派的"},
 ]
