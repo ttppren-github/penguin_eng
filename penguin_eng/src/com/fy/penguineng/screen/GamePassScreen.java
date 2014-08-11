@@ -32,6 +32,7 @@ import com.fy.penguineng.FreetypeFontWrap;
 import com.fy.penguineng.PenguinEng;
 import com.fy.penguineng.ScoreManager;
 import com.fy.penguineng.icontrol.IScoreManager;
+import com.fy.penguineng.widgets.PopWindow;
 import com.fy.penguineng.world.WordPool;
 
 /**
@@ -40,16 +41,17 @@ import com.fy.penguineng.world.WordPool;
  */
 public class GamePassScreen extends BaseScreen {
 	private final String RETRY = "再来一次";
-	private final String NEXT = "下一关";
-	private final String RETURN = "选择管卡";
-	private final String SHARE = "分享";
+	private final String NEXT = "继续闯关";
+	private final String RETURN = "选择关卡";
+	private final String SHARE = "是否分享到朋友圈？";
 	private final String C1 = "恭喜您：\n        在本关中成功阻止雪山融化，并获得\"%s\"称号。";
 	private final String[] C2 = { "环保卫士", "环保斗士", "环保勇士" };
 
 	private PenguinEng gameMain;
-	private Button btnRetry, btnBack, btnNext, btnShare;
+	private Button btnRetry, btnBack, btnNext;
 	private TextArea letter;
 	private Image letterBackground;
+	private PopWindow shareWin;
 
 	/**
 	 * 
@@ -59,7 +61,7 @@ public class GamePassScreen extends BaseScreen {
 
 		FreetypeFontWrap font = new FreetypeFontWrap();
 		LabelStyle labelStyle = new LabelStyle(font.getFont(RETURN + RETRY
-				+ NEXT + SHARE), Color.BLACK);
+				+ NEXT), Color.BLACK);
 
 		btnRetry = new Button(Assets.getInstance().skin, Assets.Btn);
 		btnRetry.add(new Label(RETRY, labelStyle));
@@ -73,10 +75,6 @@ public class GamePassScreen extends BaseScreen {
 		btnNext.add(new Label(NEXT, labelStyle));
 		btnNext.addListener(clickListener);
 
-		btnShare = new Button(Assets.getInstance().skin, Assets.Btn);
-		btnShare.add(new Label(SHARE, labelStyle));
-		btnShare.addListener(clickListener);
-
 		final Table tableRoot = new Table();
 		tableRoot.setBounds(0, 0, Assets.VIRTUAL_WIDTH,
 				Assets.VIRTUAL_HEIGHT / 2);
@@ -87,9 +85,6 @@ public class GamePassScreen extends BaseScreen {
 		tableRoot.row();
 		tableRoot.row().spaceTop(20);
 		tableRoot.add(btnBack);
-		tableRoot.row();
-		tableRoot.row().spaceTop(20);
-		tableRoot.add(btnShare);
 		tableRoot.defaults().align(Align.center);
 		tableRoot.padTop(50);
 		baseStage.addActor(tableRoot);
@@ -113,12 +108,27 @@ public class GamePassScreen extends BaseScreen {
 		this.setBackground(assets.getTexture(Assets.BgSucc));
 
 		String stage = WordPool.getInstance().getStage();
-		int level = ScoreManager.getInstance().getLevel(Integer.valueOf(stage));
+		//int level = ScoreManager.getInstance().getLevel(Integer.valueOf(stage));
+		int level = 3;
 		for (int i = 0; i < level; i++) {
 			Image img = new Image(assets.getTexture(Assets.Medal));
 			img.setPosition(Assets.VIRTUAL_WIDTH / 2 + i * 70, 420);
 			baseStage.addActor(img);
 		}
+
+		shareWin = PopWindow.create(baseStage, PopWindow.F_OK
+				| PopWindow.F_CANCEL);
+		shareWin.setMessage(SHARE);
+		shareWin.setOnCancelListener(clickListener);
+		shareWin.setOnOKListener(clickListener);
+		shareWin.setBounds(40, 200, 400, 300);
+	}
+
+	@Override
+	public void show() {
+		super.show();
+
+		shareWin.showPopup();
 	}
 
 	private ClickListener clickListener = new ClickListener() {
@@ -150,8 +160,11 @@ public class GamePassScreen extends BaseScreen {
 					gameMain.recognizerCtrl.loadGrammar(gram);
 				}
 				gameMain.setScreen(gameMain.gameScreen);
-			} else if (event.getListenerActor() == btnShare) {
+			} else if (event.getListenerActor() == shareWin.getBtnCancel()) {
+				shareWin.closePopup();
+			} else if (event.getListenerActor() == shareWin.getBtnOk()) {
 				shareMedal();
+				shareWin.closePopup();
 			}
 		}
 
@@ -209,7 +222,7 @@ public class GamePassScreen extends BaseScreen {
 	}
 
 	private void shareMedal() {
-		Pixmap pixmap = getScreenshot(20, 420, 440, 360, true);
+		Pixmap pixmap = getScreenshot(80, 460, 300, 200, true);
 		PixmapIO.writePNG(Gdx.files.local("shot.png"), pixmap);
 		pixmap.dispose();
 	}
