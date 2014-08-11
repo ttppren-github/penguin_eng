@@ -108,7 +108,8 @@ public class GamePassScreen extends BaseScreen {
 		this.setBackground(assets.getTexture(Assets.BgSucc));
 
 		String stage = WordPool.getInstance().getStage();
-		//int level = ScoreManager.getInstance().getLevel(Integer.valueOf(stage));
+		// int level =
+		// ScoreManager.getInstance().getLevel(Integer.valueOf(stage));
 		int level = 3;
 		for (int i = 0; i < level; i++) {
 			Image img = new Image(assets.getTexture(Assets.Medal));
@@ -121,7 +122,7 @@ public class GamePassScreen extends BaseScreen {
 		shareWin.setMessage(SHARE);
 		shareWin.setOnCancelListener(clickListener);
 		shareWin.setOnOKListener(clickListener);
-		shareWin.setBounds(40, 200, 400, 300);
+		shareWin.setBounds(40, 80, 400, 300);
 	}
 
 	@Override
@@ -222,9 +223,15 @@ public class GamePassScreen extends BaseScreen {
 	}
 
 	private void shareMedal() {
-		Pixmap pixmap = getScreenshot(80, 460, 300, 200, true);
-		PixmapIO.writePNG(Gdx.files.local("shot.png"), pixmap);
+//		Pixmap pixmap = getScreenshot((int)letterBackground.getX(),
+//				(int)letterBackground.getY(), (int)letterBackground.getWidth(),
+//				(int)letterBackground.getHeight(), true);
+		Pixmap pixmap = getScreenshot(20, 420, 440, 360, true);
+		
+		PixmapIO.writePNG(Gdx.files.external("starfish/shot.png"), pixmap);
 		pixmap.dispose();
+		
+		gameMain.recognizerCtrl.shareToWX();
 	}
 
 	private static Pixmap getScreenshot(int x, int y, int w, int h,

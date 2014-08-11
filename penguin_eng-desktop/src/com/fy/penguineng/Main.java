@@ -39,5 +39,11 @@ public class Main {
 		public boolean checkFirstRun() {
 			return false;
 		}
+
+		@Override
+		public void shareToWX() {
+			// TODO Auto-generated method stub
+			
+		}
 	};
 }
