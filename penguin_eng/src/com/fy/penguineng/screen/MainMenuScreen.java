@@ -22,8 +22,10 @@ import com.fy.penguineng.widgets.PopWindow;
 public class MainMenuScreen extends BaseScreen {
 
 	private final String MSG = "确认要退出？";
+	private final String START = "开始";
+	private final String ABOUT = "关于";
 	private PenguinEng game;
-	private Button btnStart;
+	private Button btnStart, btnAbout;
 	private FreetypeFontWrap font;
 	private LabelStyle labelStyle;
 	private PopWindow window;
@@ -37,16 +39,27 @@ public class MainMenuScreen extends BaseScreen {
 		this.setBackground(assets.getTexture(Assets.MainMenu_Bg));
 
 		font = new FreetypeFontWrap();
-		labelStyle = new LabelStyle(font.getFont("开始退出"), Color.BLACK);
+		labelStyle = new LabelStyle(font.getFont(START + ABOUT), Color.BLACK);
 
-		Label lab = new Label("开始", labelStyle);
+		Label lab = new Label(START, labelStyle);
 		btnStart = new Button(assets.skin, Assets.Btn);
 		btnStart.add(lab);
 		btnStart.setPosition(120, 220);
 		baseStage.addActor(btnStart);
 		btnStart.addListener(clicListener);
 
+		btnAbout = new Button(assets.skin, Assets.Btn);
+		Label lab2 = new Label(ABOUT, labelStyle);
+		btnAbout.add(lab2);
+		btnAbout.setPosition(120, 160);
+		btnAbout.addListener(clicListener);
+		baseStage.addActor(btnAbout);
+
 		this.setOnBack(backListener);
+
+		window = PopWindow.create(baseStage, PopWindow.F_OK);
+		window.setMessage(MSG);
+		window.setOnOKListener(clicListener);
 	}
 
 	@Override
@@ -64,6 +77,8 @@ public class MainMenuScreen extends BaseScreen {
 			} else if (null != window
 					&& event.getListenerActor() == window.getBtnOk()) {
 				Gdx.app.exit();
+			} else if (event.getListenerActor() == btnAbout) {
+				game.recognizerCtrl.showAbout();
 			}
 		}
 
@@ -76,9 +91,6 @@ public class MainMenuScreen extends BaseScreen {
 			if (window != null && window.isVisible()) {
 				window.closePopup();
 			} else {
-				window = PopWindow.create(baseStage, PopWindow.F_OK);
-				window.setMessage(MSG);
-				window.setOnOKListener(clicListener);
 				window.showPopup();
 			}
 		}

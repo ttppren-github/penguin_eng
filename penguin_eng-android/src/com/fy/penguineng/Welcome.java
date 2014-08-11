@@ -27,7 +27,7 @@ public class Welcome extends Activity {
 	private GestureDetector detector;
 	private Context ctx;
 	private int curPos;
-	private ImageView img1, img2, img3;
+	private ImageView img1, img2, img3, img4;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +51,6 @@ public class Welcome extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// Intent intent = new Intent();
-				// intent.setClass(ctx, MainActivity.class);
-				// startActivity(intent);
 				finish();
 			}
 
@@ -70,6 +67,10 @@ public class Welcome extends Activity {
 		img3 = new ImageView(this);
 		img3.setBackgroundResource(R.drawable.introduction3);
 		viewFlipper.addView(img3);
+		
+		img4 = new ImageView(this);
+		img4.setBackgroundResource(R.drawable.team_introduction);
+		viewFlipper.addView(img4);
 
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(20, 20);
 		// 将小圆点放到imageView数组当中
@@ -123,7 +124,7 @@ public class Welcome extends Activity {
 		}
 
 		private void showNext() {
-			if (viewFlipper.getCurrentView() != img3) {
+			if (viewFlipper.getCurrentView() != img4) {
 				// if (curPos < viewFlipper.getChildCount()) {
 				viewFlipper.setInAnimation(AnimationUtils.loadAnimation(ctx,
 						R.anim.push_left_in));

@@ -108,9 +108,7 @@ public class GamePassScreen extends BaseScreen {
 		this.setBackground(assets.getTexture(Assets.BgSucc));
 
 		String stage = WordPool.getInstance().getStage();
-		// int level =
-		// ScoreManager.getInstance().getLevel(Integer.valueOf(stage));
-		int level = 3;
+		int level = ScoreManager.getInstance().getLevel(Integer.valueOf(stage));
 		for (int i = 0; i < level; i++) {
 			Image img = new Image(assets.getTexture(Assets.Medal));
 			img.setPosition(Assets.VIRTUAL_WIDTH / 2 + i * 70, 420);
@@ -129,7 +127,7 @@ public class GamePassScreen extends BaseScreen {
 	public void show() {
 		super.show();
 
-		shareWin.showPopup();
+//		shareWin.showPopup();
 	}
 
 	private ClickListener clickListener = new ClickListener() {

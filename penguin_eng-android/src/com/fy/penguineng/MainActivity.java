@@ -153,6 +153,12 @@ public class MainActivity extends AndroidApplication {
 		public void shareToWX() {
 			shareWeiXin();
 		}
+
+		@Override
+		public void showAbout() {
+			Intent intent = new Intent(ctx, Welcome.class);
+			ctx.startActivity(intent);
+		}
 	};
 
 	@Override
@@ -215,7 +221,7 @@ public class MainActivity extends AndroidApplication {
 		wxApi = WXAPIFactory.createWXAPI(this, "");
 		wxApi.registerApp("");
 		wxApi.handleIntent(getIntent(), wxEventHandler);
-		
+
 		Log.d(TAG, "initWXShare");
 	}
 
@@ -223,7 +229,7 @@ public class MainActivity extends AndroidApplication {
 		initWXShare();
 		if (!Environment.getExternalStorageState().equals(
 				Environment.MEDIA_MOUNTED)) {
-			
+
 			Log.d(TAG, "external storage error");
 			return;
 		}
@@ -244,7 +250,7 @@ public class MainActivity extends AndroidApplication {
 		req.message = msg;
 		req.scene = SendMessageToWX.Req.WXSceneTimeline;
 		wxApi.sendReq(req);
-		
+
 		Log.d(TAG, "Send request");
 	}
 

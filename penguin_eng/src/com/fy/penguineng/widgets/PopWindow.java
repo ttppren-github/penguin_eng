@@ -22,17 +22,14 @@ public class PopWindow extends Window {
 	private Button btnOk, btnCancel;
 	private int flag;
 	private String message;
-	private static PopWindow instance;
 
 	public static PopWindow create(Stage parent, int flag) {
-		if (null == instance) {
-			FreetypeFontWrap font = new FreetypeFontWrap();
-			WindowStyle style = new WindowStyle(font.getFont(""), Color.BLACK,
-					null);
-			instance = new PopWindow("", style);
-			instance.flag = flag;
-			instance.setParent(parent);
-		}
+		PopWindow instance;
+		FreetypeFontWrap font = new FreetypeFontWrap();
+		WindowStyle style = new WindowStyle(font.getFont(""), Color.BLACK, null);
+		instance = new PopWindow("", style);
+		instance.flag = flag;
+		instance.setParent(parent);
 
 		return instance;
 	}
@@ -116,7 +113,6 @@ public class PopWindow extends Window {
 	public void closePopup() {
 		if (isVisible()) {
 			this.setVisible(false);
-			instance = null;
 		}
 	}
 

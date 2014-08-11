@@ -11,4 +11,6 @@ public interface IGameControl {
 	public boolean checkFirstRun();
 
 	public void shareToWX();
+
+	public void showAbout();
 }
